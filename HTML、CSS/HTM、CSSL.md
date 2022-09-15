@@ -306,19 +306,25 @@
 
 # 10. CSS 布局
 
-## 10.1 上下部分固定，中间三栏布局（中间两边定宽，中间center部分自适应）
-
 **介绍**：
 
 ​		header、footer 部分固定高度，left、right 部分固定宽度。center 部分自适应，并且优先渲染。
 
 
 
-###  10.1.1 圣杯布局
+圣杯布局和双飞翼布局的区别：
+
+​	![image-20220915175757621](https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/4964/image-20220915175757621.png)
+
+双飞翼布局优化了圣杯布局开启定位的方式
+
+
+
+##  10.1 圣杯布局
 
 * flex布局（弹性）：
 
-  [源码地址]()
+  [源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80/flex%E5%B8%83%E5%B1%80.html)
 
   **主要思路：**
 
@@ -326,9 +332,9 @@
 
   
 
-* float布局1（浮动）：
+* **！！float布局1（浮动）：**
 
-  [源码地址]()
+  [源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80/%E6%B5%AE%E5%8A%A8%E5%B8%83%E5%B1%801.html)
 
   ​	**主要思路：**
 
@@ -358,7 +364,7 @@
 
 * float布局2（浮动）：
 
-  [源码地址]()
+  [源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80/%E6%B5%AE%E5%8A%A8%E5%B8%83%E5%B1%802.html)
 
 ​		**主要思路：**
 
@@ -368,7 +374,7 @@
 
 * 绝对定位布局：
 
-  [源码地址]()
+  [源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80/%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D.html)
 
   **主要思路：**
 
@@ -380,14 +386,18 @@
 
 * grid布局（网格）：
 
-  [源码地址]()
+  [源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80/%E7%BD%91%E6%A0%BC%E5%B8%83%E5%B1%80.html)
 
   **主要思路：**
 
 
 
-### 10.1.2 双飞翼布局
+## 10.1 双飞翼布局
+
+​		优化了圣杯布局的浮动版本1开启定位的方式。在中间区域包含在一个容器里。这个容器与左右两区域同层级。原先在浮动情况下，左边区域通过 margin-left 设置为 -中间区域的宽度，可以移动到中间区域开头部分。但是由于两边空白的区域是中间区域的内边距设置的，所以还需要通过定位进行移动。
+
+​		但是，圣杯布局在中间区域包含在一个容器内，通过设置中间区域的外边距来留出左右两边空位。中间区域的父容器与左右两边同层级，则左边区域的 margin-left 可以设置为 -中间区域父容器的宽度，就可以不使用定位。
+
+​	[源码地址](https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80/index.html)
 
 
-
-## 10.2 两栏布局
