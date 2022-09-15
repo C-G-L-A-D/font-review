@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        圣杯布局-网格布局版
+    </title>
+    <style>
+        .header { grid-area: header; }
+        .left { grid-area: left; }
+        .middle { grid-area: middle; }
+        .right { grid-area: right; }
+        .footer { grid-area: footer; }
+
+        .container {
+            display: grid;
+            grid:
+                'header header header header header header header'
+                'left left middle middle middle right right'
+                'footer footer footer footer footer footer footer';
+            grid-gap: 10px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+
+        .container > div {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 20px 0;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">头部区域</div>
+        <div class="middle">中间区域</div>
+        <div class="left">左边区域</div>
+        <div class="right">右边区域</div>
+        <div class="footer">底部区域</div>
+    </div>
+</body>
+
+</html>

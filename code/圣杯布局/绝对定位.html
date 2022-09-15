@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        圣杯布局-绝对定位版
+    </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header,
+        .footer {
+            width: 100%;
+            height: 50px;
+            background-color: pink;
+        }
+
+        .left, .right {
+            position: absolute;
+            width: 200px;
+            background-color: blue;
+        }
+
+        .container {
+            position: relative;
+        }
+
+        .middle {
+            background-color: yellow;
+            margin: 0 200px;
+            width: 100%;
+        }
+        .left {
+            left: 0;
+            top: 0;
+        }
+        .right {
+            right: 0;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">头部区域</div>
+    <div class="container">
+        <div class="middle">中间区域</div>
+        <div class="left">左边区域</div>
+        <div class="right">右边区域</div>
+    </div>
+    <div class="footer">底部区域</div>
+</body>
+
+</html>
