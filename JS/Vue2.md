@@ -430,39 +430,84 @@ watch: {
 
 
 
-# 13. 组件通信
+# 13. 插槽（slot）
 
-## 13.1 props / $emit
+​		slot 是Vue得内容分发机制，组件内部的模板引擎使用 slot 元素作为承载分发内容的出口。当 `template` 标签可以使用最新的 `v-slot` 属性来指定插槽名称 。slot 有三类：
 
-### 1. 父组件向子组件传值
+* **默认（匿名）插槽：**当 `slot` 标签没有指定 `name` 属性时，统一使用一个默认插槽。
+* **具名插槽：**带有 `name` 属性的 `slot` 插槽，不同的内容根据 `name` 属性分别在各自的 `slot` 插槽进行展示
+* **作用域插槽：**可以将子组件的内部数据通过传递给父组件，父组件中需要分发的内容通过 `scope` 属性获取传递的数据来决定展示的内容。
 
-​	通过 `props`
+插槽内容可以通过在子组件的标签内进行编写。例如：
+
+**父组件：**
+
+```vue
+<template>
+	<div>
+        <SComponent>
+            <template v-slot:hello>
+                hello~ 这是具名插槽
+            </template>
+            <div slot="again">
+                again~ 具名插槽
+            </div>
+            <ul>
+               <li>这里使用的是：默认插槽</li>
+               <li v-for="i in arr" :key="i">
+                   {{i}}
+               </li>
+            </ul>
+
+            <ol slot="olScope" scope={slotProps}>
+               <li>这里使用的是：作用域插槽</li>
+               <li v-for="i in slotProps.arr" :key="i">
+                   {{i}}
+               </li>
+            </ol>
+        </SComponent>
+    </div>    
+</template>
+
+<script>
+    ...
+	data(){
+        return {
+            arr: [1, 2, 3]
+        }
+    },
+    components: [ SComponent ]
+    ...
+</script>
+
+
+```
 
 
 
-### 2. 子组件向父组件传值
+**子组件：**
 
-​	通过 `$emit`
+```vue
+<template>
+	<div>
+        <slot name="hello">没有内容时，默认展示</slot>
+        <slot name="again">默认展示内容</slot>
+        <slot>默认插槽展示内容</slot>
+        <slot :arr="arr">像props一样传递数据</slot>
+    </div> 
+</template>
+
+<script>
+    ...
+	data(){
+        return {
+            arr: [1, 2, 3]
+        }
+    }
+</script>
+```
 
 
-
-## 13.2 事件总线 EventBus（$emit / $on）
-
-
-
-## 13.3 依赖注入
-
-
-
-## 13.3 ref / $refs
-
-
-
-## 13.3 $parent / $children
-
-
-
-## 13.4 $attrs / $listeners
 
 
 
@@ -504,3 +549,11 @@ new Vue({
 # 16. 插件
 
 ​	在main.js中创建Vue实例之前通过 `Vue.use()` 引入组件。自己编写组件时，需要将内容放在 `install()` 中，其中第一个参数是Vue
+
+
+
+# 17. 组件通信
+
+## 17.1 props
+
+​		父组件可以通过 `props` 向子组件进行通信
