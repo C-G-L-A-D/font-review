@@ -1,7 +1,10 @@
 /* 
     ESModules 向下兼容 CommonJS，
     也就是ES Modules 可以引入 CommonJs 规范导出的对象，
-    但是导出对象是默认引入
+    但是导出对象是默认引入，即
+    module.exports = {say, b, getA} 等于
+    obj = {say, b, getA}
+    export default obj
 */
 import commonJs from '../CommonJS/ziyue.js'
 console.log('b = ', commonJs.b)

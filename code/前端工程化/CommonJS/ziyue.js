@@ -1,8 +1,6 @@
 /* 
-    Nodejs 使用 ESModule 定义 .mjs 文件的模块,
-    但是我们可以通过 NodeJs 的配置文件设置 "type": "module"
-    就可以在 js 文件中使用 esModule 语法。
-    NodeJs 的配置文件 package.json 可以通过 npm init -y 生成，或者自己新建
+    NodeJs 使用 CommonJS 定义 js文件，
+    在NodeJS中使用CommonJs模块化，不需要使用新的后缀名
 */
 
 const ziyue = (text) => `
@@ -48,8 +46,26 @@ const c = () => {
     return a
 }
 
-export default ziyue;
-export { 
+// module.exports = ziyue
+/* 
+    CommonJS 导出的是真的对象，
+    所以通过将导出的变量赋给 module.exports 对象的属性值来实现导出别名
+*/
+module.exports = {
+    say: ziyue,
     b,
-    c as getA
+    getA: c
 }
+
+
+/* 
+    也可以使用 exports 进行导出，exports 是 module.exports 初始值的引用，
+    而CommonJS 实际上是通过导出 module.exports 指向的空间，
+    因此不能将 exports 和 module.exports 混用，因为实际只导出 module.exports
+    而一旦修改 module.exports = 新对象，那 exports 指向的初始化空间就无效了。
+    exports = {
+        say: ziyue,
+        b,
+        getA: c
+    }
+*/
