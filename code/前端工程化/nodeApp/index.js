@@ -12,4 +12,4 @@ const dataStr = readFileSync(targetPath, { encoding: 'utf-8' })
 
 // 将文件从字符串转换为 json 对象
 const data = JSON.parse(dataStr)
-console.log(data);
+
