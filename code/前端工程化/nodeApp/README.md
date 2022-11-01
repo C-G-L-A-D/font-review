@@ -12,10 +12,16 @@
 │   └── data.json（语料库文件）
 ├── practise （练习模块）
 │   ├── learnFS.js （练习FS模块）
+│   ├── learnInput.js （练习输入输出）
 │   └── learnPath.js （练习Path模块）
 ├── index.js （项目主文件）
 ├── lib （项目依赖）
 │   ├── generator.js （生成文章模块）
+│   ├── corpus.js （获取语料库数据、保存文章模块）
+│   ├── cmd.js （检查命令行参数输入、生成命令行输入帮助信息）
+│   ├── generator.js （生成文章模块）
 │   └── random.js （随机模块）
 ├── package.json （配置文件）
 └── output （输出文件）
+
+command-line-args包可以帮助检测命令行输入

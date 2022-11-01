@@ -32,21 +32,21 @@ export function randomPick(arr) {
 */
 export function createRandomPicker(arr) {
     // 创建数组副本，即可不该本数组
-    newArr = [...arr],
+    const newArr = [...arr];
     function randomPcik() {
-        const len = newArr.length-1
-        const index = randomInt(0, len)
-        const picked = newArr[index]
+        const len = newArr.length-1;
+        const index = randomInt(0, len);
+        const picked = newArr[index];
         // 元素值交换位置
-        [newArr[index], newArr[len]] = [newArr[len], newArr[index]]
-        return picked
+        [newArr[index], newArr[len]] = [newArr[len], newArr[index]];
+        return picked;
     }
     // 调用 createRandomPicker 时才会多调用一次。
-    randomPcik()
+    randomPcik();
     /* 
         将 randomPcik() 返回，作为闭包调用，
         则每次改变的都是数组副本，
         如果对同一数组选择多次，则只用传入一次参数。
     */
-    return randomPcik
+    return randomPcik;
 }

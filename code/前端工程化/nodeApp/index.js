@@ -1,15 +1,24 @@
-import { readFileSync } from 'fs'
-import { resolve, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { generate } from './lib/generator.js'
+import { createRandomPicker } from './lib/random.js'
+import { loadCorpus, saveCorpus } from './lib/corpus'
+import { options } from './lib/cmd'
 
-// 获取需要读取文件的路径
-const url = import.meta.url
-const curPath = fileURLToPath(url)
-const targetPath = resolve(dirname(curPath), './corpus/data.json')
+// 获取数据
+const corpus = loadCorpus('corpus/data.json')
 
-// 读取文件
-const dataStr = readFileSync(targetPath, { encoding: 'utf-8' })
+// 测试生成文章，随机生成标题
+// const titlePicker = createRandomPicker(corpus.title)
+// const title = titlePicker()
+// const article = generate(title, {corpus})
+// const output = saveCorpus(title, article)
+// console.log(`生成成功！文章保存于：${output}`)
 
-// 将文件从字符串转换为 json 对象
-const data = JSON.parse(dataStr)
+
+
+
+// 测试，自动生成标题和文章
+const title = options.title || createRandomPicker(corpus.title)()
+const article = generate(title, {corpus, ...options})
+const output = saveToFile(title, article)
+console.log(`生成成功！文章保存于：${output}`)
 

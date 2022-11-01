@@ -1,12 +1,10 @@
 import { randomInt, createRandomPicker } from './random.js'
 // 生成文章
-export function generate(title, {corpus, min=6000, max=10000}) {
-
+export function generate(title, {corpus, min = 2000 , max = 6000} = {}) {
   // 随机生成文章长度
-  const articalLength = randomInt(min, max)
-
+  const articalLength = randomInt(min, max);
   // 获得对应组成部分的集合
-  const { famous, bosh_before, bosh, said, conclude } = corpus
+  const { famous, bosh_before, bosh, said, conclude } = corpus;
   // 批量生成随机生成器
   const [ 
     famousPicker,
