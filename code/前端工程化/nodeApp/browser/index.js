@@ -1,5 +1,6 @@
 import {generate} from '../lib/generator.js';
 import {createRandomPicker} from '../lib/random.js';
+import {loadCorpus} from '../lib/corpus'
 
 async function loadCorpus(corpuspath) {
   if(corpuspath) {
