@@ -23,9 +23,12 @@
     <main>
         <article></article>
     </main>
+    <!-- 引用打包文件 -->
+    <script src="https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/nodeApp/dist/index.js"></script>
     <script type="module">
-        import { generate } from './lib/generator.js'
-        import { createRandomPicker } from './lib/random.js'
+        // 从线上打包文件中获取功能模块
+        const {generate, createRandomPicker, loadCorpus} = bullshitGenerator;
+
         const options = document.querySelector('.options')
         // 初始化字数
         const config = { min: 2000, max: 5000 }
@@ -45,6 +48,7 @@
             const corpus = await (await fetch('./corpus/data.json')).json();
             const pickTitle = createRandomPicker(corpus.title);
             titleEl.value = pickTitle();
+            // 监听输入框键盘事件
             titleEl.addEventListener('keydown', (event) => {
                 if(event.key === 'Enter' && event.target.value.trim()) {
                     const text = generate(titleEl.value, {corpus, ...config});
@@ -53,10 +57,12 @@
                     alert('输入不能为空或都是空格')
                 }
             })
+            // 监听按钮生成文章
             generateButton.addEventListener('click', () => {
                 const text = generate(titleEl.value, {corpus, ...config});
                 article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
             });
+            // 监听按钮生成标题
             anotherTitleButton.addEventListener('click', () => {
                 titleEl.value = pickTitle();
                 if(article.innerHTML) generateButton.click();
@@ -64,5 +70,4 @@
         }());
     </script>
 </body>
-<!-- <script src="./index.html"></script> -->
 </html>
