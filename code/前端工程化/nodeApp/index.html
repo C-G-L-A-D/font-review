@@ -15,9 +15,9 @@
             <div>最大字数：<input id="max" type="range" min="1000" max="10000" step="100"><span>5000</span></div>
         </div>
         <div class="ref"><a href="https://github.com/menzi11/BullshitGenerator">原版</a></div>
-        <div class="title"><span>标题：</span><input id="title" type="text" value="">
+        <div class="title"><span>标题：</span><input id="title" type="text" placeholder="请输入标题">
             <button id="generate">生成</button>
-            <button id="anotherTitle">换</button>
+            <button id="anotherTitle">换主题</button>
         </div>
     </header>
     <main>
@@ -40,11 +40,19 @@
         const anotherTitleButton = document.getElementById('anotherTitle');
         const article = document.querySelector('article');
         const titleEl = document.getElementById('title');
-    
+
         (async function () {
             const corpus = await (await fetch('./corpus/data.json')).json();
             const pickTitle = createRandomPicker(corpus.title);
             titleEl.value = pickTitle();
+            titleEl.addEventListener('keydown', (event) => {
+                if(event.key === 'Enter' && event.target.value.trim()) {
+                    const text = generate(titleEl.value, {corpus, ...config});
+                    article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
+                } else if(event.key === 'Enter' && !event.target.value.trim()) {
+                    alert('输入不能为空或都是空格')
+                }
+            })
             generateButton.addEventListener('click', () => {
                 const text = generate(titleEl.value, {corpus, ...config});
                 article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
