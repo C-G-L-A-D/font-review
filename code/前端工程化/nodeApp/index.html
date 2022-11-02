@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,51 +25,48 @@
         <article></article>
     </main>
     <!-- 引用打包文件 -->
-    <script type='text/javascript' src="https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/nodeApp/dist/index.js"></script>
+    <script type='text/javascript'
+        src="https://github.com/C-G-L-A-D/font-review/blob/main/code/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/nodeApp/dist/index.js"></script>
     <script>
-        // 从线上打包文件中获取功能模块
-        // const {generate, createRandomPicker, loadCorpus} = bullshitGenerator;
-        console.log(window.bullshitGenerator);
-        console.log(generate, createRandomPicker, loadCorpus);
-        const options = document.querySelector('.options')
-        // 初始化字数
-        const config = { min: 2000, max: 5000 }
-        // 响应式获取滑动条的值，即更新文章字数范围
-        options.addEventListener('change', ({target}) => {
+        const { generate, createRandomPicker, loadCorpus } = bullshitGenerator;
+        console.log(bullshitGenerator);
+        const options = document.querySelector('.options');
+        const config = { min: 2000, max: 5000 };
+        options.addEventListener('change', ({ target }) => {
             const num = Number(target.value);
             config[target.id] = num;
             target.parentNode.querySelector('input + span').innerHTML = num;
-        })
-
+        });
         const generateButton = document.getElementById('generate');
         const anotherTitleButton = document.getElementById('anotherTitle');
         const article = document.querySelector('article');
         const titleEl = document.getElementById('title');
 
         (async function () {
-            const corpus = await (await fetch('./corpus/data.json')).json();
+            const corpus = await loadCorpus();
             const pickTitle = createRandomPicker(corpus.title);
             titleEl.value = pickTitle();
             // 监听输入框键盘事件
             titleEl.addEventListener('keydown', (event) => {
-                if(event.key === 'Enter' && event.target.value.trim()) {
-                    const text = generate(titleEl.value, {corpus, ...config});
+                if (event.key === 'Enter' && event.target.value.trim()) {
+                    const text = generate(titleEl.value, { corpus, ...config });
                     article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
-                } else if(event.key === 'Enter' && !event.target.value.trim()) {
+                } else if (event.key === 'Enter' && !event.target.value.trim()) {
                     alert('输入不能为空或都是空格')
                 }
             })
-            // 监听按钮生成文章
+            // 生成文章
             generateButton.addEventListener('click', () => {
-                const text = generate(titleEl.value, {corpus, ...config});
+                const text = generate(titleEl.value, { corpus, ...config });
                 article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
             });
-            // 监听按钮生成标题
+            // 生成标题
             anotherTitleButton.addEventListener('click', () => {
                 titleEl.value = pickTitle();
-                if(article.innerHTML) generateButton.click();
+                if (article.innerHTML) generateButton.click();
             });
         }());
     </script>
 </body>
+
 </html>

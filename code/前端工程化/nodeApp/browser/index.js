@@ -1,14 +1,13 @@
 import {generate} from '../lib/generator.js';
 import {createRandomPicker} from '../lib/random.js';
-// import { loadCorpus } from '../lib/corpus'
 
-// async function loadCorpus(corpuspath) {
-//   if(corpuspath) {
-//     const corpus = await (await fetch(corpuspath)).json();
-//     return corpus;
-//   }
-//   const defaultCorpus = await import('../corpus/data.json');
-//   return defaultCorpus;
-// }
+async function loadCorpus(corpuspath) {
+  if(corpuspath) {
+    const corpus = await (await fetch(corpuspath)).json();
+    return corpus;
+  }
+  const defaultCorpus = await import('../corpus/data.json');
+  return defaultCorpus;
+}
 
-window.bullshitGenerator = {generate, createRandomPicker, loadCorpus};
+export {generate, createRandomPicker, loadCorpus};
