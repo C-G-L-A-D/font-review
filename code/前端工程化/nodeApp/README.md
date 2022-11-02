@@ -18,6 +18,7 @@
 ├── lib （项目依赖）
 │   ├── generator.js （生成文章模块）
 │   ├── corpus.js （获取语料库数据、保存文章模块）
+│   ├── interact.js （用户交互模块）
 │   ├── cmd.js （检查命令行参数输入、生成命令行输入帮助信息）
 │   ├── generator.js （生成文章模块）
 │   └── random.js （随机模块）

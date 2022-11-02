@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 // 加载获取语料库数据
 export function loadCorpus (src) {
     // ..返回根目录
-    const path = resolve(__dirname, '..', 'src')
+    const path = resolve(__dirname, '..', src)
 
     // 读取文件数据
     const data = readFileSync(path, { encoding: 'utf-8' })
@@ -19,7 +19,7 @@ export function loadCorpus (src) {
 
 // 保存生成的文章
 export function saveCorpus(title, article) {
-    const outputDir = resolve(dirname(curPath), 'output');
+    const outputDir = resolve(__dirname, '..', 'output');
     const time = moment().format('YYYY-MM-DD');
     const outputFile = resolve(outputDir, `${title}${time}.txt`)
 
@@ -32,4 +32,4 @@ export function saveCorpus(title, article) {
     writeFileSync(outputFile, text)
 
     return outputFile
-} 
+}
