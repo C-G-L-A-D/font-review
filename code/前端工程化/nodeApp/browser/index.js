@@ -11,4 +11,6 @@ async function loadCorpus(corpuspath) {
   return defaultCorpus;
 }
 
+let a = 10;
+
 window.bullshitGenerator = {generate, createRandomPicker, loadCorpus};
