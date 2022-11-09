@@ -25,3 +25,31 @@ npm i webpack webpack-cli -D
 // npx webpack <入口文件路径> <打包模式 development||production>
 npx webpack ./src/main.js --mode=production
 ```
+
+
+
+# 2. webpack 基本配置
+
+1.  在项目根目录下创建 `webpack` 的配置文件 `webpack.config.js` ；
+2. 创建一个用于记录 `webpack` 配置信息的对象，并使用CommonJs模块化将其暴露出去(Node环境支持CommonJs模块化)；
+3. 在配置对象中设置对应的配置选项：
+
+```javascript
+module.exports = {
+    // 打包入口文件
+    entry: "",
+    // 输出配置
+    output: {},
+    // 配置lodaer(加载器)
+    module: {
+        // 配置规则
+        rules: []
+    },
+    // webpack 插件
+    plugins: [],
+    // 模式 production || development
+    mode: ""
+}
+```
+
+4. 使用 `webpack` 配置文件之后，可以直接运行 `npx webpack` 命令
