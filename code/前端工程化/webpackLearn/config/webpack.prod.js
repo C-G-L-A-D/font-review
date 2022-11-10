@@ -4,6 +4,7 @@ const path = require('path');
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin =require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin")
 
 // 封装样式需要的loader
 const getStyleLoaders = (preProcessor) => {
@@ -104,9 +105,12 @@ module.exports = {
             // 自动设置打包生成的js资源
             template: path.resolve(__dirname, "../public/index.html")
         }),
+        // 配置css样式兼容性插件
         new MiniCssExtractPlugin({
             filename: "static/css/main.css"
-        })
+        }),
+        // 配置css样式压缩插件
+        new CssMinimizerWebpackPlugin()
     ],
     /* 生产模式不需要开启服务器
     // 配置开发服务器
