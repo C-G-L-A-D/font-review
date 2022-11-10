@@ -5,6 +5,26 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin =require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// 封装样式需要的loader
+const getStyleLoaders = (preProcessor) => {
+    return [
+        MiniCssExtractPlugin.loader,
+        "css-loader",
+        {
+            // 解决大多数css兼容性问题
+            loader: "postcss-loader",
+            options: {
+                postcssOptions: {
+                    plugins: [
+                        "postcss-preset-env"
+                    ]
+                }
+            }
+        },
+        preProcessor
+    ].filter(Boolean)
+}
+
 module.exports = {
     // 打包入口文件
     entry: "./src/main.js",
@@ -24,23 +44,15 @@ module.exports = {
             {
                 // 使用正则匹配处理 .css 文件
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"]
+                use: getStyleLoaders()
             },
             {
                 test: /\.less$/i,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "less-loader"
-                ]
+                use: getStyleLoaders("less-loader")
             },
             {
                 test: /\.s[ac]ss$/i,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "sass-loader"
-                ]
+                use: getStyleLoaders("sass-loader")
             },
             // 处理图片资源
             {
