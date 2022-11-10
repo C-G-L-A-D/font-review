@@ -8,7 +8,7 @@ module.exports = {
     // 输出配置
     output: {
         // 指定输出文件所在目录
-        path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "../dist"),
         // 指定输出文件的文件名
         filename: "static/js/main.js",
         clean: true
