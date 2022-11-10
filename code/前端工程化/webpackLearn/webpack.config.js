@@ -16,8 +16,16 @@ module.exports = {
         rules: [
             {
                 // 使用正则匹配处理 .css 文件
-                test: /\.css$/,
+                test: /\.css$/i,
                 use: ["style-loader", "css-loader"]
+            },
+            {
+                test: /\.less$/i,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "less-loader"
+                ]
             }
         ]
     },
