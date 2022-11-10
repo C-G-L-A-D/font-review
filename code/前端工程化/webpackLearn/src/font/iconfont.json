@@ -1,0 +1,114 @@
+{
+  "id": "2661857",
+  "name": "内网",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "17606327",
+      "name": "接入管理",
+      "font_class": "jieruguanli",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "809937",
+      "name": "user",
+      "font_class": "icon-user",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "3899790",
+      "name": "网页",
+      "font_class": "wangye",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "7588096",
+      "name": "警告",
+      "font_class": "jinggao",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "7712708",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e734",
+      "unicode_decimal": 59188
+    },
+    {
+      "icon_id": "9874523",
+      "name": "KHCFDC_首页",
+      "font_class": "shouye",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "11748306",
+      "name": "雷达",
+      "font_class": "leida",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "17412814",
+      "name": "WiFi Protected-1",
+      "font_class": "WiFiProtected-1",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    },
+    {
+      "icon_id": "18386855",
+      "name": "返回",
+      "font_class": "fanhui",
+      "unicode": "e6d5",
+      "unicode_decimal": 59093
+    },
+    {
+      "icon_id": "19657500",
+      "name": "添加",
+      "font_class": "tianjia",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "21056269",
+      "name": "雷达",
+      "font_class": "leida2_1",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "22653924",
+      "name": "搜索",
+      "font_class": "search2-copy",
+      "unicode": "eb8e",
+      "unicode_decimal": 60302
+    },
+    {
+      "icon_id": "1417429",
+      "name": "标识类_白名单",
+      "font_class": "biaoshilei_baimingdan",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "10933923",
+      "name": "登记",
+      "font_class": "dengji",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "20605253",
+      "name": "初始化",
+      "font_class": "chushihua",
+      "unicode": "e8b1",
+      "unicode_decimal": 59569
+    }
+  ]
+}

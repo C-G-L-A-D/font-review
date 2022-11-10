@@ -39,6 +39,7 @@ module.exports = {
             // 处理图片资源
             {
                 test: /\.(png|jpe?g|gif|webp)$/i,
+                // 将文件转换成 webpack 能识别的资源，同时可以根据大小处理资源形式
                 type: "asset",
                 // 解析器
                 parser: {
@@ -53,6 +54,15 @@ module.exports = {
                     // [ext]: 使用之前的文件扩展名
                     // [query]: 添加之前的 query 参数
                     filename: "static/imgs/[hash:8][ext][query]"
+                }
+            },
+            // 处理字体图标、音视频资源
+            {
+                test: /\.(ttf|woff2?|map4|map3|avi)$/i,
+                // 将资源转换城webpack能识别的资源
+                type: "asset/resource",
+                generator: {
+                    filename: "static/media/[hash:8][ext][query]"
                 }
             }
         ]

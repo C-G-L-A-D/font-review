@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2661857 */
+  src: url('iconfont.woff2?t=1625888048435') format('woff2'),
+       url('iconfont.woff?t=1625888048435') format('woff'),
+       url('iconfont.ttf?t=1625888048435') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jieruguanli:before {
+  content: "\e6a7";
+}
+
+.icon-icon-user:before {
+  content: "\e63c";
+}
+
+.icon-wangye:before {
+  content: "\e60f";
+}
+
+.icon-jinggao:before {
+  content: "\e61e";
+}
+
+.icon-password:before {
+  content: "\e734";
+}
+
+.icon-shouye:before {
+  content: "\e6da";
+}
+
+.icon-leida:before {
+  content: "\e62f";
+}
+
+.icon-WiFiProtected-1:before {
+  content: "\e6f0";
+}
+
+.icon-fanhui:before {
+  content: "\e6d5";
+}
+
+.icon-tianjia:before {
+  content: "\e615";
+}
+
+.icon-leida2_1:before {
+  content: "\e63d";
+}
+
+.icon-search2-copy:before {
+  content: "\eb8e";
+}
+
+.icon-biaoshilei_baimingdan:before {
+  content: "\e606";
+}
+
+.icon-dengji:before {
+  content: "\e60e";
+}
+
+.icon-chushihua:before {
+  content: "\e8b1";
+}
+
