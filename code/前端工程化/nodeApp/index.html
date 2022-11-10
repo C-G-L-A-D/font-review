@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,8 +25,9 @@
         <article></article>
     </main>
     <script type="module">
-        import { generate } from './lib/generator.js'
-        import { createRandomPicker } from './lib/random.js'
+        // import { generate } from './lib/generator.js'
+        // import { createRandomPicker } from './lib/random.js'
+        console.log(ll);
         const options = document.querySelector('.options')
         // 初始化字数
         const config = { min: 2000, max: 5000 }
@@ -34,35 +36,37 @@
             const num = Number(target.value);
             config[target.id] = num;
             target.parentNode.querySelector('input + span').innerHTML = num;
-        })
-
+        });
         const generateButton = document.getElementById('generate');
         const anotherTitleButton = document.getElementById('anotherTitle');
         const article = document.querySelector('article');
         const titleEl = document.getElementById('title');
 
         (async function () {
-            const corpus = await (await fetch('./corpus/data.json')).json();
+            const corpus = await loadCorpus();
             const pickTitle = createRandomPicker(corpus.title);
             titleEl.value = pickTitle();
+            // 监听输入框键盘事件
             titleEl.addEventListener('keydown', (event) => {
-                if(event.key === 'Enter' && event.target.value.trim()) {
-                    const text = generate(titleEl.value, {corpus, ...config});
+                if (event.key === 'Enter' && event.target.value.trim()) {
+                    const text = generate(titleEl.value, { corpus, ...config });
                     article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
-                } else if(event.key === 'Enter' && !event.target.value.trim()) {
+                } else if (event.key === 'Enter' && !event.target.value.trim()) {
                     alert('输入不能为空或都是空格')
                 }
             })
+            // 生成文章
             generateButton.addEventListener('click', () => {
-                const text = generate(titleEl.value, {corpus, ...config});
+                const text = generate(titleEl.value, { corpus, ...config });
                 article.innerHTML = `<section>${text.join('</section><section>')}</section>`;
             });
+            // 生成标题
             anotherTitleButton.addEventListener('click', () => {
                 titleEl.value = pickTitle();
-                if(article.innerHTML) generateButton.click();
+                if (article.innerHTML) generateButton.click();
             });
         }());
     </script>
 </body>
-<!-- <script src="./index.html"></script> -->
+
 </html>
