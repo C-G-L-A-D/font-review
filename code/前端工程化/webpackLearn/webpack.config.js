@@ -8,7 +8,8 @@ module.exports = {
         // 指定输出文件所在目录
         path: path.resolve(__dirname, "dist"),
         // 指定输出文件的文件名
-        filename: "static/js/main.js"
+        filename: "static/js/main.js",
+        clean: true
     },
     // 配置lodaer(加载器)
     module: {

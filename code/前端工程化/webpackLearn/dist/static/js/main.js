@@ -236,7 +236,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_
   \***********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("module.exports = __webpack_require__.p + \"static/font/4cc54916.ttf?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.ttf?");
+eval("module.exports = __webpack_require__.p + \"static/media/4cc54916.ttf?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.ttf?");
 
 /***/ }),
 
@@ -246,7 +246,7 @@ eval("module.exports = __webpack_require__.p + \"static/font/4cc54916.ttf?t=1625
   \*************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("module.exports = __webpack_require__.p + \"static/font/59c14269.woff2?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.woff2?");
+eval("module.exports = __webpack_require__.p + \"static/media/59c14269.woff2?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.woff2?");
 
 /***/ }),
 
@@ -256,7 +256,7 @@ eval("module.exports = __webpack_require__.p + \"static/font/59c14269.woff2?t=16
   \************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("module.exports = __webpack_require__.p + \"b7735abdf36e2b76d91b.woff?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.woff?");
+eval("module.exports = __webpack_require__.p + \"static/media/b7735abd.woff?t=1625888048435\";\n\n//# sourceURL=webpack://webpacklearn/./src/font/iconfont.woff?");
 
 /***/ }),
 
