@@ -66,6 +66,12 @@ module.exports = {
                 generator: {
                     filename: "static/media/[hash:8][ext][query]"
                 }
+            },
+            // 使用 babel 兼容 es6 语法
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader"
             }
         ]
     },
