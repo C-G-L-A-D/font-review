@@ -1,0 +1,3 @@
+# 设置eslint语法检查忽略文件
+dist
+src/js/sum.js

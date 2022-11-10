@@ -1,4 +1,5 @@
-const path = require('path')
+const path = require('path');
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
     // 打包入口文件
@@ -69,7 +70,13 @@ module.exports = {
         ]
     },
     // webpack 插件
-    plugins: [],
+    plugins: [
+        // 配置 eslint 插件
+        new ESLintWebpackPlugin({
+            // 指定检查文件的根目录
+            context: path.resolve(__dirname, "src")
+        })
+    ],
     // 模式 production || development
     mode: "development"
-}
+};
