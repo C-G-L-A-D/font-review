@@ -3,6 +3,7 @@
 const path = require('path');
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin =require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     // 打包入口文件
@@ -23,12 +24,12 @@ module.exports = {
             {
                 // 使用正则匹配处理 .css 文件
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"]
+                use: [MiniCssExtractPlugin.loader, "css-loader"]
             },
             {
                 test: /\.less$/i,
                 use: [
-                    "style-loader",
+                    MiniCssExtractPlugin.loader,
                     "css-loader",
                     "less-loader"
                 ]
@@ -36,7 +37,7 @@ module.exports = {
             {
                 test: /\.s[ac]ss$/i,
                 use: [
-                    "style-loader",
+                    MiniCssExtractPlugin.loader,
                     "css-loader",
                     "sass-loader"
                 ]
@@ -90,6 +91,9 @@ module.exports = {
             // 设置html的模板文件
             // 自动设置打包生成的js资源
             template: path.resolve(__dirname, "../public/index.html")
+        }),
+        new MiniCssExtractPlugin({
+            filename: "static/css/main.css"
         })
     ],
     /* 生产模式不需要开启服务器
