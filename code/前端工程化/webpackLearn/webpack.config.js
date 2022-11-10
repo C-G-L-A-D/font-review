@@ -13,7 +13,13 @@ module.exports = {
     // 配置lodaer(加载器)
     module: {
         // 配置规则
-        rules: []
+        rules: [
+            {
+                // 使用正则匹配处理 .css 文件
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"]
+            }
+        ]
     },
     // webpack 插件
     plugins: [],
