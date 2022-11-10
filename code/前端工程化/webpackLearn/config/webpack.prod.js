@@ -83,13 +83,13 @@ module.exports = {
         // 配置 eslint 插件
         new ESLintWebpackPlugin({
             // 指定检查文件的根目录
-            context: path.resolve(__dirname, "src")
+            context: path.resolve(__dirname, "../src")
         }),
         // 配置 html 插件
         new HtmlWebpackPlugin({
             // 设置html的模板文件
             // 自动设置打包生成的js资源
-            template: path.resolve(__dirname, "public/index.html")
+            template: path.resolve(__dirname, "../public/index.html")
         })
     ],
     /* 生产模式不需要开启服务器

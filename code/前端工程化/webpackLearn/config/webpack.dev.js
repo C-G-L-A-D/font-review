@@ -75,7 +75,7 @@ module.exports = {
             }
         ]
     },
-    plugin: [
+    plugins: [
         // 配置 eslint 插件
         new ESLintWebpackPlugin({
             // 指定检查文件的根目录

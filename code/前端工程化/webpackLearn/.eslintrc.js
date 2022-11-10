@@ -23,7 +23,7 @@ module.exports = {
     */
     rules: {
         // 禁止使用分号
-        semi: "warn",
+        // semi: "warn",
         // 要求数组方法的回调中有返回
         "array-callback-return": "warn",
         // 要求 switch 语句中有 default 分支

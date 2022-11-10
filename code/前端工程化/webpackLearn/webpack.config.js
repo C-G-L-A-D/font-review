@@ -4,7 +4,7 @@ const HtmlWebpackPlugin =require("html-webpack-plugin");
 
 module.exports = {
     // 打包入口文件
-    entry: "./src/main.js",
+    entry: "../src/main.js",
     // 输出配置
     output: {
         // 指定输出文件所在目录
