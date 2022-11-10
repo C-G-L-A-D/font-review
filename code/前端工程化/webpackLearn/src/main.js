@@ -3,6 +3,8 @@ import sum from './js/sum.js'
 
 import './css/index.css'
 import './css/index.less'
+import './css/index.scss'
+import './css/index.sass'
 
 
 console.log(count(32, 42))
