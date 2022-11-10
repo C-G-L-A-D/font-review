@@ -14,6 +14,7 @@ module.exports = {
     module: {
         // 配置规则
         rules: [
+            // 处理样式资源
             {
                 // 使用正则匹配处理 .css 文件
                 test: /\.css$/i,
@@ -34,6 +35,11 @@ module.exports = {
                     "css-loader",
                     "sass-loader"
                 ]
+            },
+            // 处理图片资源
+            {
+                test: /\.(png|jpe?g|gif|webp)$/i,
+                type: "asset"
             }
         ]
     },

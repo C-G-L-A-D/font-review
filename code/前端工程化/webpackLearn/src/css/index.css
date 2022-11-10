@@ -1,5 +1,8 @@
-.sass {
-  width: 100px;
-  height: 100px;
-  background-color: hotpink;
+@charset "UTF-8";
+.scss {
+  width: 200px;
+  height: 200px;
+  color: red;
+  background-size: cover;
+  background-image: url("../image/靓妹照.jpg");
 }

@@ -3,5 +3,7 @@ $red: red;
 .scss {
     width: 200px;
     height: 200px;
-    background-color: $red;
+    color: $red;
+    background-size: cover;
+    background-image: url("../image/靓妹照.jpg");
 }
