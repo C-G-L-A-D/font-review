@@ -8,7 +8,7 @@ module.exports = {
         // 指定输出文件所在目录
         path: path.resolve(__dirname, "dist"),
         // 指定输出文件的文件名
-        filename: "main.js"
+        filename: "static/js/main.js"
     },
     // 配置lodaer(加载器)
     module: {
@@ -39,7 +39,21 @@ module.exports = {
             // 处理图片资源
             {
                 test: /\.(png|jpe?g|gif|webp)$/i,
-                type: "asset"
+                type: "asset",
+                // 解析器
+                parser: {
+                    // 小于 10kb 的图片会被转换为base64
+                    dataUrlCondition: {
+                        maxSize: 10 * 1024
+                    }
+                },
+                // 生成器
+                generator: {
+                    // 设置图片输出目录和命名方式
+                    // [ext]: 使用之前的文件扩展名
+                    // [query]: 添加之前的 query 参数
+                    filename: "static/imgs/[hash:8][ext][query]"
+                }
             }
         ]
     },
