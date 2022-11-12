@@ -92,7 +92,12 @@ module.exports = {
                         test: /\.js$/,
                         // 设置不处理安装的插件和依赖，因为已经经过处理了
                         exclude: /node_modules/,
-                        loader: "babel-loader"
+                        loader: "babel-loader",
+                        options: {
+                            // 缓存之前的babel编译结果，第二次打包时没有修改的文件就不用再经过babel转换
+                            cacheDirectory: true, // 开启babel编译缓存
+                            cacheCompression: false // 不压缩缓存文件
+                        }
                     }
                 ]
             }
@@ -105,7 +110,10 @@ module.exports = {
             // 指定检查文件的根目录
             context: path.resolve(__dirname, "../src"),
             // 设置不检查安装的插件和依赖
-            exclude: "node_modules" // 默认值
+            exclude: "node_modules", // 默认值
+            cache: true, // 开启缓存，缓存之前检查语法的编译文件
+            // 设置缓存目录
+            cacheLocation: path.resolve(__dirname, "../node_modules/.cache/.eslintcache")
         }),
         // 配置 html 插件
         new HtmlWebpackPlugin({
