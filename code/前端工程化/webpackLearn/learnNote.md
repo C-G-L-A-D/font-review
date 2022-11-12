@@ -53,3 +53,20 @@ module.exports = {
 ```
 
 4. 使用 `webpack` 配置文件之后，可以直接运行 `npx webpack` 命令
+
+
+
+# 3. 使用 loader 处理资源
+
+​	`webpack` 本身不能识别 js 外其他资源文件，所以我们可以通过 `loader` 来帮助 `webpack` 解析其他资源文件，然后在 `webpack` 的配置文件中配置对应的模块处理规则
+
+
+
+处理样式
+
+* style-loader
+* css-loader
+
+* less-loader
+* sass-loader
+

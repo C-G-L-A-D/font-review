@@ -121,5 +121,7 @@ module.exports = {
     },
     */
     // 模式 production || development
-    mode: "production"
+    mode: "production",
+    // 配置sourceMao，映射报错位置
+    devtool: "source-map"
 };

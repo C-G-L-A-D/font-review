@@ -95,5 +95,7 @@ module.exports = {
         open: true // 自动打开浏览器
     },
     // 模式 production || development
-    mode: "development"
+    mode: "development",
+    // 配置sourceMao，映射报错位置
+    devtool: "cheap-module-source-map"
 };
