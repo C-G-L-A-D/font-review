@@ -1,10 +1,14 @@
 // 生产模式环境配置
 
+const os = require("os")
 const path = require('path');
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+
+const threads = os.cpus().length
 
 // 封装样式需要的loader
 const getStyleLoaders = (preProcessor) => {
@@ -92,12 +96,23 @@ module.exports = {
                         test: /\.js$/,
                         // 设置不处理安装的插件和依赖，因为已经经过处理了
                         exclude: /node_modules/,
-                        loader: "babel-loader",
-                        options: {
-                            // 缓存之前的babel编译结果，第二次打包时没有修改的文件就不用再经过babel转换
-                            cacheDirectory: true, // 开启babel编译缓存
-                            cacheCompression: false // 不压缩缓存文件
-                        }
+                        use: [
+                            {
+                                loader: "babel-loader",
+                                options: {
+                                    // 缓存之前的babel编译结果，第二次打包时没有修改的文件就不用再经过babel转换
+                                    cacheDirectory: true, // 开启babel编译缓存
+                                    cacheCompression: false // 不压缩缓存文件
+                                }
+                            },
+                            {
+                                // 设置babel线程
+                                loader: "thread-loader",
+                                options: {
+                                    worker: threads // 线程数量
+                                }
+                            }
+                        ]
                     }
                 ]
             }
@@ -113,7 +128,8 @@ module.exports = {
             exclude: "node_modules", // 默认值
             cache: true, // 开启缓存，缓存之前检查语法的编译文件
             // 设置缓存目录
-            cacheLocation: path.resolve(__dirname, "../node_modules/.cache/.eslintcache")
+            cacheLocation: path.resolve(__dirname, "../node_modules/.cache/.eslintcache"),
+            threads
         }),
         // 配置 html 插件
         new HtmlWebpackPlugin({
@@ -125,9 +141,20 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "static/css/main.css"
         }),
-        // 配置css样式压缩插件
-        new CssMinimizerWebpackPlugin()
+        
     ],
+    // 压缩插件配置
+    optimization: {
+        minimize: true,
+        minimizer: [
+            // 配置css样式压缩插件
+            new CssMinimizerWebpackPlugin(),
+            // 配置多线程插件
+            new TerserPlugin({
+                parallel: threads // 开启多线程
+            })
+        ]
+    },
     /* 生产模式不需要开启服务器
     // 配置开发服务器
     devServer: {
