@@ -1,4 +1,5 @@
-import count from './js/count.js'
+// 不会将 add 函数进行打包
+import { count } from './js/count.js'
 import sum from './js/sum.js'
 
 import './font/iconfont.css'
