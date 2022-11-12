@@ -90,6 +90,7 @@ module.exports = {
                     // 使用 babel 兼容 es6 语法
                     {
                         test: /\.js$/,
+                        // 设置不处理安装的插件和依赖，因为已经经过处理了
                         exclude: /node_modules/,
                         loader: "babel-loader"
                     }
@@ -102,7 +103,9 @@ module.exports = {
         // 配置 eslint 插件
         new ESLintWebpackPlugin({
             // 指定检查文件的根目录
-            context: path.resolve(__dirname, "../src")
+            context: path.resolve(__dirname, "../src"),
+            // 设置不检查安装的插件和依赖
+            exclude: "node_modules" // 默认值
         }),
         // 配置 html 插件
         new HtmlWebpackPlugin({
