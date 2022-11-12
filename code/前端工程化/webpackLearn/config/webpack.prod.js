@@ -102,7 +102,9 @@ module.exports = {
                                 options: {
                                     // 缓存之前的babel编译结果，第二次打包时没有修改的文件就不用再经过babel转换
                                     cacheDirectory: true, // 开启babel编译缓存
-                                    cacheCompression: false // 不压缩缓存文件
+                                    cacheCompression: false, // 不压缩缓存文件
+                                    // 引入插件，使打包babel文件时只引用一个辅助函数
+                                    plugins: ["@babel/plugin-transform-runtime"]
                                 }
                             },
                             {
