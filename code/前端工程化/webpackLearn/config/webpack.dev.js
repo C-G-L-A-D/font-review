@@ -2,7 +2,7 @@
 
 const path = require('path');
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
-const HtmlWebpackPlugin =require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 
 module.exports = {
@@ -15,63 +15,68 @@ module.exports = {
     },
     module: {
         rules: [
-            // 处理样式资源
             {
-                // 使用正则匹配处理 .css 文件
-                test: /\.css$/i,
-                use: ["style-loader", "css-loader"]
-            },
-            {
-                test: /\.less$/i,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "less-loader"
-                ]
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader"
-                ]
-            },
-            // 处理图片资源
-            {
-                test: /\.(png|jpe?g|gif|webp)$/i,
-                // 将文件转换成 webpack 能识别的资源，同时可以根据大小处理资源形式
-                type: "asset",
-                // 解析器
-                parser: {
-                    // 小于 10kb 的图片会被转换为base64
-                    dataUrlCondition: {
-                        maxSize: 10 * 1024
+                // webpack匹配文件处理，会默认把所有规则都进行对照，比较慢没必要
+                oneOf: [
+                    // 处理样式资源
+                    {
+                        // 使用正则匹配处理 .css 文件
+                        test: /\.css$/i,
+                        use: ["style-loader", "css-loader"]
+                    },
+                    {
+                        test: /\.less$/i,
+                        use: [
+                            "style-loader",
+                            "css-loader",
+                            "less-loader"
+                        ]
+                    },
+                    {
+                        test: /\.s[ac]ss$/i,
+                        use: [
+                            "style-loader",
+                            "css-loader",
+                            "sass-loader"
+                        ]
+                    },
+                    // 处理图片资源
+                    {
+                        test: /\.(png|jpe?g|gif|webp)$/i,
+                        // 将文件转换成 webpack 能识别的资源，同时可以根据大小处理资源形式
+                        type: "asset",
+                        // 解析器
+                        parser: {
+                            // 小于 10kb 的图片会被转换为base64
+                            dataUrlCondition: {
+                                maxSize: 10 * 1024
+                            }
+                        },
+                        // 生成器
+                        generator: {
+                            // 设置图片输出目录和命名方式
+                            // [ext]: 使用之前的文件扩展名
+                            // [query]: 添加之前的 query 参数
+                            filename: "static/imgs/[hash:8][ext][query]"
+                        }
+                    },
+                    // 处理字体图标、音视频资源
+                    {
+                        test: /\.(ttf|woff2?|map4|map3|avi)$/i,
+                        // 将资源转换城webpack能识别的资源
+                        type: "asset/resource",
+                        generator: {
+                            filename: "static/media/[hash:8][ext][query]"
+                        }
+
+                    },
+                    // 使用 babel 兼容 es6 语法
+                    {
+                        test: /\.js$/,
+                        exclude: /node_modules/,
+                        loader: "babel-loader"
                     }
-                },
-                // 生成器
-                generator: {
-                    // 设置图片输出目录和命名方式
-                    // [ext]: 使用之前的文件扩展名
-                    // [query]: 添加之前的 query 参数
-                    filename: "static/imgs/[hash:8][ext][query]"
-                }
-            },
-            // 处理字体图标、音视频资源
-            {
-                test: /\.(ttf|woff2?|map4|map3|avi)$/i,
-                // 将资源转换城webpack能识别的资源
-                type: "asset/resource",
-                generator: {
-                    filename: "static/media/[hash:8][ext][query]"
-                } 
-               
-            },
-            // 使用 babel 兼容 es6 语法
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader"
+                ]
             }
         ]
     },
