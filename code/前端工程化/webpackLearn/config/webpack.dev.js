@@ -92,7 +92,9 @@ module.exports = {
     devServer: {
         host: "localhost",
         port: "3001",
-        open: true // 自动打开浏览器
+        open: true, // 自动打开浏览器
+        // 设置热模块替换HotModuleReplacement，修改代码后，只更新修改的模块，提升打包编译速度
+        hot: true // 默认开启，但是只有样式直接支持，js代码需要在进行处理
     },
     // 模式 production || development
     mode: "development",
