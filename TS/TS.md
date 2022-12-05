@@ -55,7 +55,7 @@ tsc xxx.ts
 
 # 2. TypeScript 基础
 
-## 2.1 原始数据类型
+## 2.1 原始数据类型（Primitive Data Types）
 
 ​	对应 JavaScript 的 7 中原始数据类型，TypeScript 也能定义对应的数据类型。
 
@@ -113,5 +113,43 @@ function alertName() : void {
 
 
 
-## 2.2 对象类型
+## 2.2 任意值类型（Any Type）
+
+​	任意值的数据类型是 `any` ，意思是 `any` 类型的变量可以是任意类型的数据，但不同的是， `any` 类型的变量在赋值的过程中可以更改其数据类型，并且可以访问该变量的任何属性和调用该变量的任何方法。
+
+​	如果变量在声明时，没有指定数据类型并且也没有赋值，则会被识别为任意值类型。
+
+```typescript
+let myAge : any = 29; // 显然 myAge 是数值类型的数据
+myAge = 'twenty-nine'; // myAge 可以更改为字符串类型的数据。
+// 如果 myAge 是用 number 类型来定义的，重新赋值时不可以更改其数据类型，会报错。
+
+// 可以访问任意值类型变量的所有属性，即使没有定义该属性，都不会报错。
+console.log(myAge.year) // undefined;
+
+// 可以调用任意值类型变量的所有方法，即使没有定义该方法，也不会报错。但是运行时试运行编译后的js文件，因此运行时会报错。
+console.log(myAge.say()) // 运行报错，编译不报错。
+
+let word // 编译会报错
+word = '你好！';
+// 等价于 let word : any = '你好！';
+```
+
+
+
+## 2.3 类型推论（Type Inference）
+
+​	如果在定义变量时，没有明确的指定类型，TS 会按照类型推论的规则推断该变量的类型。但是在没有明确指定的类型且进行赋值时，编译会报错。
+
+```typescript
+// 没有指明数据类型，会报错。
+let myFavoriteNumber = 'seven';
+
+// 但是根据类型推论，等价于 let myFavoriteNumber : string = 'seven';
+
+// 没有指明数据类型，也没进行赋值，也会报错，但会认为是any类型。
+let word // 编译会报错
+word = '你好！';
+// 等价于 let word : any = '你好！';
+```
 
