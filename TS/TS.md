@@ -153,3 +153,30 @@ word = '你好！';
 // 等价于 let word : any = '你好！';
 ```
 
+
+
+## 2.4 联合类型（Union Types）
+
+​	定义变量时可以设置多个数据类型，在使用该变量时，会通过类型推论规则确定该变量此时的数据类型。在之后联合类型的变量可以更改赋值为指定的数据类型，但是不能设置为除指定的数据类型的其他类型。
+
+​	如果要确认联合类型的变量当前为什么数据类型，可以通过设置的所有类型里共有的属性和方法进行判断。如果访问的属性或调用的方法不是共有，则编译报错。
+
+```typescript
+// 用 | 分隔数据类型，表示 currentYear 可以为string 或者 number类型
+let currentYear : string | number = 2022; // 类型推论判断为 number
+
+// 此时 currentYear 类型推论判断为 string 类型
+currentYear = '二零二二年'; 
+
+// 报错，不能设置为 string 和 number外的数据类型
+currentYear = Symbol(2022); // 报错
+
+function getString(something: string | number) : string {
+    // number 类型没有 length 属性，因此访问该属性会报错
+    console.log(something.length); // 报错
+    
+    // string 和 number 类型都拥有toString()方法，不会报错
+    return something.toString();
+}
+```
+
