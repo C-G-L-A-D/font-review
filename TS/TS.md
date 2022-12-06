@@ -358,3 +358,184 @@ function reverse(x: number | string): number | string | void {
 
 
 
+## 2.8 类型断言（Type Assertion）
+
+### 1. 介绍	
+
+​	**类型断言** 可以用来手动指定一个值的类型。
+
+​	**有两种语法方式来使用类型断言**：`值 as 类型` 和 `<类型>值` 。但在 `tsx` 语法中只必须使用前者，并且后者也可能表示的是泛型，会产生歧义。所有使用类型断言时，最好使用 `值 as 类型` 的语法。
+
+
+
+### 2. 类型断言常见的用途有：
+
+* 确定联合类型的变量为指定类型时，在进行操作。从而避免了访问到联合类型变量的不共有属性或方法；
+
+```typescript
+function getInfo(item: number | string) : any[] {
+    /* 
+        不是共有方法，直接调用会报错
+        return item.split;
+    */
+    // 将 item 断言为 string 类型时编译就不会报错
+    return (item as string).split('');
+}
+
+// 传入的数值类型没有 split 方法，在编译成 js 文件运行时会报错
+console.log(getInfo(234));
+```
+
+
+
+* 需要区分访问的属性或调用的方法是否是子类才有时，可以使用断言。但通常是对接口的实例对象进行使用，因为具体的类可以用 `instanceof` 进行判断。
+
+```typescript
+interface ApiError extends Error {
+    code: number;
+}
+
+interface HttpError extends Error {
+    statusCode: number;
+}
+
+function isApiError(error: Error) {
+    /* 
+    Error 数据类型中没有 code 属性，直接访问会报错
+    不能用 instance 来判断 error 是否是 接口的实例对象，
+      因为 interface 接口在编译后会被删除，所以运行时会报错。
+      因此像判断此时只能用类型断言来进行判断是否有code属性存在
+     */
+    if(typeof (error as ApiError).code === 'number') {
+        return true;
+    }
+
+    return false;
+}
+```
+
+
+
+* 将任何一个类型断言为 `any` 时，可以访问这个变量上的所有属性和方法。但滥用 `as any`  极有可能掩盖真正的类型错误。因此通常用在临时添加某个属性时：
+
+```typescript
+window.foo = 1; // 报错，因为window对象没有foo属性
+
+(window as any).foo = 1;
+```
+
+
+
+* 将 any 类型断言为一个具体的类型时
+
+```typescript
+function getCacheData(key: string) : any {
+    // 此时用于接收返回值的变量就必须要定义为 any 类型，这样下去可能导致产生更多的 any 类型变量。
+    return (window as any).cache[key];
+}
+
+interface Cat {
+    name: string;
+    run(): void;
+}
+
+const tom = getCacheData('tom') as Cat;
+tom.run();
+```
+
+
+
+​	但并不是任意类型都可以断言为另一个类型。要使用断言，必须是一个类型兼容另一个类型，那么这两种类型可以相互断言为对方。
+
+```typescript
+interface Animal {
+    name: string;
+}
+
+interface House {
+    place: string;
+}
+
+interface Cat {
+    name: string;
+    run(): void;
+}
+
+let jerry: Cat = {
+    name: "jerry",
+    run: () => { console.log('run') }
+}
+
+// 兼容，可以断言。相当于 Cat extends Animal
+let animal: Animal = jerry;
+// 不兼容，报错，Cat 接口中没有 place 属性。不可以断言
+let house: House = jerry;
+```
+
+
+
+### 3. 双重断言
+
+* 任何类型都可以被断言为 any；
+* any 可以被断言为任何类型；
+
+如果将以上两点进行结合，那么我们可以通过**双重断言将一个类型断言为任意一个类型**。
+
+```typescript
+interface Cat {
+    run(): void;
+}
+interface Fish {
+    swim(): void;
+}
+// Cat 和 Fish 不可相互断言
+function testCat(cat: Cat) {
+    // 但是将 Cat 类型断言为 any 类型后，就可以再断言为 Fish 类型
+    return (cat as any as Fish);
+}
+```
+
+​	**但这样，大多数情况会导致运行错误，是所以应该尽量避免使用双重断言。**
+
+
+
+### 4. 类型断言 和 类型转换
+
+​	类型断言只会影响 TypeScript 编译时的类型，与类型转换不同。再编译后，会将类型断言语句删除，因此访问到没有定义的变量会返回 `undefined` ，调用没有定义的方法时依旧会报错。而类型转换是实际影响到数据的类型。
+
+
+
+### 5. 类型断言 和 类型声明
+
+​	有点类似 Java 的多态。类型声明比类型断言更加严格。
+
+​	当使用类型声明给变量指定 `any类型` 外的数据类型时，只能给这个变量赋值指定数据类型的数据，不能将不同类型的数据断言后赋值给该变量。
+
+​	当没有使用类型定义或数据类型为 `any类型` 时，我们可以将兼容的类型，通过类型断言后赋值给另一个类型。
+
+```typescript
+interface Animal {
+    name: string;
+}
+interface Cat {
+    name: string;
+    run(): void;
+}
+
+const animal: Animal = {
+    name: 'tom'
+};
+// 通过类型推论判断 tom 的数据类型为 any，可以使用断言赋值为任意类型
+let tom = animal as Cat; 
+// 类型声明固定了 jerry 的数据类型为
+let jerry: cat = animal as Cat;
+```
+
+
+
+### 6. 类型断言 和 泛型
+
+> 等我学到泛型再补充
+
+
+
