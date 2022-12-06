@@ -53,7 +53,7 @@ tsc xxx.ts
 
 
 
-# 2. TypeScript 基础
+# 2. TypeScript 基础（默认严格模式下）
 
 ## 2.1 原始数据类型（Primitive Data Types）
 
@@ -179,4 +179,182 @@ function getString(something: string | number) : string {
     return something.toString();
 }
 ```
+
+
+
+## 2.5 对象类型 —— 接口（interface）
+
+​	接口可以对对象描述进行限定。通过 `interface` 关键字定义接口对象。默认情况下，继承的对象只能够拥有接口定义指定属性，不能多，也不能少。但是可以定义可选属性、任意属性和只读属性。可选属性允许定义继承该接口的对象时是否为该属性赋值。任意属性允许对象新增指定类型的属性，但同时限制了对象中其他属性的数据类型只能是任意属性数据类型的子集。只读属性需要在接口定义属性前加上 `readonly` 关键字表示只读。只读属性只能在首次定义对象时为属性赋值，之后就只能读取。
+
+```typescript
+Interface Person {
+    name : string;
+    // 可选属性，可选是否赋值
+    age ?: number;
+    // 任意属性，规定了所有属性的值只能是 string 和 number
+    [propName : string] : string | number;
+    // 只读属性，只能首次定义对象时进行赋值。
+    readonly height : number;
+}
+
+let tom : Person = {
+    name: 'Tom',
+    // age: 28;
+    age: false, // 报错
+    weight: 200,
+    height: 180
+}
+
+tom.age = 28;
+tom.height = 32; // 报错
+console.log(tom.height) // 180
+```
+
+
+
+## 2.6 对象类型 —— 数组（Array）
+
+​	TypeScript 定义数组也可以指定数组的类型，数组中存在其他类型的数据会报错。同时在调用数组的一些方法时，传入的参数也会根据数组类型进行限定。例如：
+
+```typescript
+let strs : string[] = ["hello", "this", "close"];
+strs.push(1) // 报错，因为传入参数为数值类型，不允许加入到字符串数组中。
+```
+
+​	同时，还可以创建数组泛型：
+
+```typescript
+let fibonacci : Array<number> = [1, 1, 2, 3, 5];
+```
+
+​	也可以用接口来表示数组，但这通常用于描述类数组，而 TS 也有已经定义好的类数组接口类型， 如 `IArguments` 、 `NodeList` 、 `HTMLCollection` ：
+
+``` typescript
+interface NumberArray {
+    [index : number] : number;
+};
+let fibonacci : NumberArray = [1, 1, 2, 3, 5];
+
+function sum() {
+    let args : IArguments = arguments;
+}
+
+// TS 中定义的 IArguments 接口如下
+interface IArguments {
+    [index : number] : any; // 允许数组元素出现任意类型
+    length : number;
+    callee : Function;
+}
+```
+
+​	当我们需要定义数组元素的类型不唯一时，我们可以将数组定义为 `any[]` 类型。
+
+
+
+## 2.7 对象类型 —— 函数（Function）
+
+* **函数类型定义**
+
+  在 JavaScript 中定义函数有两种方式：**函数声明** 和 **函数表达式** 。但不论是那种方式都需要在 TypeScript 中对输入、输出进行约束。
+
+  函数声明的类型定义：
+
+```typescript
+function sum(x: number, y: number) : number {
+    return x + y;
+}
+```
+
+​			函数表达式的类型定义（在 TS 函数定义时的 => 与 ES6的 => 不同）：
+
+```typescript
+// 此时的 => 表示函数定义, => 左边是参数的类型定义，右边是返回值的类型定义
+let sum: (x: number, y: number) => number;
+sum = function(x: number, y: number) : number {
+    return x + y;
+}
+/*
+等价于
+let sum: (x: number, y: number) => number = function(x: number, y: number) : number {
+    return x + y;
+}
+*/
+```
+
+​			但不论是哪种方式声明定义函数，在默认情况下调用函数时，传入的参数个数必须于定义的参数是个数一致，否则会报错。
+
+```typescript
+function sum(x: number, y: number) : number {
+    return x + y;
+};
+sum(1); // 报错
+sum(1, 2, 3); // 报错
+```
+
+
+
+* **可选参数、参数默认值**
+
+  当函数的参数有可选参数时，传入的参数个数就不需要与定义时的一致。设置可选参数的方式和设置可选属性的方式一致，在类型定义 `:` 前加上 `?` 即可。不过需要注意的是，一般情况下，可选参数必须定义在所有必须参数之后。
+
+  我们也可以为函数的参数设置默认值，此时， TypeScript 会默认将设置默认值的参数识别为可选参数。但是设置了默认值的参数后面是可以跟必须参数的。
+
+```typescript
+// lastName 为可选参数
+function buildName1(firstName: string, lastName?: string) : string {
+	return firstName + ' ' + lastName;
+};
+
+buildName1('Luo');
+
+// 错误，此时的可选参数后面不能跟必须参数
+function buildNameError(firstName?: string, lastName: string) : string {
+	return firstName + ' ' + lastName;
+};
+
+function buildName2(firstName: string = 'Luo', lastName: string) : string {
+	return firstName + ' ' + lastName;
+}
+
+buildName2(undefined, 'hhh');
+```
+
+​	
+
+* **剩余参数**
+
+  当不确定参数个数时，我们可以使用 ES6 的 `...rest` 方式获取函数中的剩余参数：
+
+```typescript
+function push(array: any[], ...items: any[]) : void {
+    items.forEach(function(item: any) {
+        array.push(item)
+    });
+};
+let a: any[] : [];
+push(a, 1, 2, 3)
+```
+
+
+
+* **函数重载**
+
+  在 TypeScript 中允许函数进行重载从而做出不同的处理。即允许函数接收不同数量或类型的参数。
+
+  可以通过联合类型的参数来进行函数重载，但这样不能够精确表达重载的不同情况；因此，我们可以通过重复多次定义函数，在最后一次的函数定义后再进行函数实现来进行准精确的表达。不过需要注意，如果函数定义中有包含关系，需要优先把精确的定义写在最前面。
+
+``` typescript
+function reverse(x: number) : number;
+function reverse(x: string) : string;
+function reverse(x: number | string): number | string | void {
+    if(typeof x === 'number') {
+        return Number(x.toString().split('').reverse().join(''));
+    } else if (typeof x === 'string') {
+        return x.split('').reverse().join('');
+    }
+    // 剩余情况不返回，所以返回值为空，还需要定义返回值为 void 类型
+}
+```
+
+
 
