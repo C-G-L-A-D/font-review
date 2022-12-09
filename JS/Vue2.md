@@ -16,7 +16,8 @@
 
 **优点：**
 
-	1. 低耦合
+1. 低耦合
+
  	2. 可重用性
  	3. 自动更新dom
  	4. 可测试
@@ -25,7 +26,8 @@
 
 **缺点：**
 
-	1. Bug 很难调试
+1. Bug 很难调试
+
  	2. 可能会花费更多内存
  	3. ViewModel 的构建和维护成本较高
 
@@ -233,7 +235,7 @@ vm.$set(vm.items, indexOfItem, newValue)
         <tr>
             <td rowspan="2">Mount阶段(挂载)</td>
             <td>beforeMount()</td>
-            <td>实例的数据初始化完毕，但是还没进行挂载。</td>
+            <td>还没进行挂载。</td>
         </tr>
         <tr>
             <td>Mounted()</td>
@@ -259,6 +261,7 @@ vm.$set(vm.items, indexOfItem, newValue)
         </tr>
     </tbody>
 </table>
+
 
 
 

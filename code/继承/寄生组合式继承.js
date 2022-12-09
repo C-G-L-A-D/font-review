@@ -15,10 +15,10 @@ function Child(name) {
 Child.prototype = Object.create(Parent.prototype)
 
 /*
-      等同于（es5写法，构建临时的父类对象）
+    等同于（es5写法，构建临时的父类对象）
     let TempFunction = function () {}
     TempFunction.prototype = Parent.prototype
-    Child.prototype = new TempFunction
+    Child.prototype = new TempFunction()
 */
 // 核心代码
 

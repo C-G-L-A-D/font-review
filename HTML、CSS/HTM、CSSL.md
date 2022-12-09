@@ -125,7 +125,7 @@
 
 ### 6.2.1 确定宽度
 
-* **marginL: 0 auto;**
+* **margin: 0 auto;**
 * position: relative; margin-left: （父width - 子width）/ 2;
 
 

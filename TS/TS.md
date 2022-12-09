@@ -49,7 +49,14 @@ tsc xxx.ts
 
 
 
-* `"strictNullChecks": true` ： 指定只能将 `null` 和 `undefined` 赋值给 `void` 类型和他们各自对应的类型。
+* `strictNullChecks`： 指定是否只能将 `null` 和 `undefined` 赋值给 `void` 类型和他们各自对应的类型。
+* `allowJs`： 是否接受 JavaScript 作为输入；
+* `include` ： 设置读取哪些可识别的文件，数组；
+* `outDir` ： 指定生成的文件存放目录；
+* `target` ： 设置 JavaScript 版本；
+* `noImplicitReturns` ：设置是否提示函数末尾需要返回值；
+* `noFallthroughCasesInSwitch` ：检查 `switch` 代码中两个 `case` 中是否添加了 `beark` 语句；
+* 
 
 
 
@@ -71,7 +78,11 @@ let sym : symbol = Symbol("hello"); // symbol类型
 
 
 
-​	与 JavaScript 不同的是 TypeScript 新增了 空值（Void） 类型，其值只能是 `undefined` 和 `null` 两种，可以用于表示没有任何返回值的函数。
+​	与 JavaScript 不同的是 TypeScript 新增了 Void 和 Never类型。
+
+​	Void 类型的值只能是 `undefined` 和 `null` 两种，可以用于表示没有任何返回值的函数。
+
+​	Never 类型主要用于接受不可能存在的值。例如，**抛出异常** 或 **死循环** 这样没有返回值的函数时，返回值可以使定义为 Never 类型。Never 类型是任何类型的子类型，可以赋值给任何类型。但没有任何类型（除自身外）可以赋值给 Never 类型。
 
 ```ts
 let unusable : void = undefined;
@@ -83,6 +94,12 @@ let isNull : void = null;
 function alertName() : void {
     alert('My name is tom.')
 }
+
+// 该函数抛出异常，永远都不会有返回值。
+function error(message: string): never {
+    throw new Error(message);
+}
+
 ```
 
 > 注：
@@ -538,4 +555,67 @@ let jerry: cat = animal as Cat;
 > 等我学到泛型再补充
 
 
+
+## 2.9 声明文件
+
+​	在引用第三方库时，我们需要引用它的声明文件，才能够进行使用。
+
+
+
+### 1. 新语法索引
+
+* `declare var` ：声明全局变量；
+* `declare function` ：声明全局方法；
+* `declare class` ： 声明全局类；
+* `declare enum` ： 声明全局枚举类型；
+* `declare namespace` ：声明（含有子属性的）全局对象；
+* `interface` 和 `type` ： 声明全局类型；
+* `export `： 导出变量；
+*  `export namespace` ： 导出（含有子属性的）对象；
+* `export default` ： ES6 默认导出；
+* `export =` ：commonjs 导出模块；
+* `export as namespace` ： UMD库声明全局变量；
+* `declare global` ：扩展全局变量；
+* `declare module` ： 扩展模块；
+* `/// <reference />` ： 三斜线指令；
+
+
+
+### 2. 什么是声明语句
+
+​	在引用第三方库时，我们经常可以使用第三库的语法或api来进行操作，但是 ts 中不存在这类语法或api，为了使编译通过，通常在 ts 中声明与第三方库中特有的变量或方法同名的变量或方法之类的，进行使用。
+
+```typescript
+// 引入 jQuery 库时，我们可以通过 $ 或 jQuery 来进行操作，但是 ts 编译时并不能识别这些操作符或变量名。因此我们可以暂时声明全局变量来进行操作。
+
+// 使用 declare var 声明全局变量，在编译后会被删除声明语句
+delcare var jQuery: (selector: string) => any;
+jQeury('#id')
+//在编后相当于直接调用 jQuery 库执行 jQeury('#id')操作语句。
+```
+
+
+
+### 3. 什么是声明文件
+
+​	通常我们会把声明语句放到单独的文件中，而这个文件就是声明文件。例如：我们把所有jQuery相关的声明语句放到一个文件里，这就是jQuery的文明文件。而声明文件的后缀名必须以 `.d.ts` 为后缀。
+
+​	当然一些第三方库，都有帮我们定义好的声明文件，只需要下载来使用就行。推荐使用 `@types` 来统一管理第三方库的声明文件。
+
+```typescript
+npm install @types/jquery --save-dev
+```
+
+
+
+### 4. 如何书写声明文件
+
+​	第三方库的使用场景主要有以下几种：
+
+* **全局变量：** 通过 `<script>` 标签引入第三方库，注入全局变量；
+* **npm 包：** 通过 `import xxx from 'xxx'` 导入，符合 ES6模块化；
+* **UMD 库：** 既可以通过 `<script>` 标签引入，也可以通过 `import` 导入；
+* **直接扩展全局变量：** 通过 `<script>` 标签引入后，改变一个全局变量的构造；
+* **在 npm 包或 UMD 库中扩展全局变量：** 引用 npm 包或 UMD 库后，改变一个全局变量的结构。
+* **模块插件：** 通过`<script>` 标签或 `import` 导入后，改变另一个模块的结构。
 
