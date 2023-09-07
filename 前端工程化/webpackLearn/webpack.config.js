@@ -19,7 +19,7 @@ module.exports = {
     rules: [
       // 处理样式资源
       {
-        // 使用正则匹配处理 .css 文件
+        // 使用正则匹配处理 .css 文件，执行顺序下->上，右->左
         test: /\.css$/i,
         use: ['style-loader', 'css-loader']
       },
