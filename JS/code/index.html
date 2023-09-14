@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>点击触发防抖事件</button>
+    <script src="./防抖.js"></script>
+    <script>
+      const btn = document.querySelector('button')
+      btn.addEventListener(
+        'click',
+        debounce(() => console.log('触发防抖事件'), 1000, true)
+      )
+    </script>
+  </body>
+</html>
