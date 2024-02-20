@@ -145,6 +145,6 @@ module.exports = {
     },
     // 模式 production || development
     mode: "development",
-    // 配置sourceMao，映射报错位置
+    // 配置sourceMap，映射报错位置
     devtool: "cheap-module-source-map"
 };

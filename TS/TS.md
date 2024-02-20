@@ -6,8 +6,8 @@
 
 ## 1.2 TypeScript 的特点
 - 支持最新的 `JavaScript` 特性；
-- 支持代码静态检查；
-- 支持其他强语言的特性，如：枚举、泛型、类型转换、命名空间、声明文件、类、接口等。
+- 支持代码静态检查，编译期间可以发现错误；
+- 支持其他**强语言**的特性，如：枚举、泛型、类型转换、命名空间、声明文件、类、接口等。
 
 
 
@@ -268,7 +268,34 @@ interface IArguments {
 
 
 
-## 2.7 对象类型 —— 函数（Function）
+## 2.7 对象类型 —— 元组类型（Tuple）
+
+​	元组类型允许一个**已知元素数量和类型**的数组，各元素的类型不必相同。例：
+
+```typescript
+let tuple : [number, string] = [15, 'sdf']
+```
+
+​	元组类型各元素对应的类型应该相同，否则会报错，错误用例：
+
+```typescript
+let tuple : [number, string] = ['55', 'saf'] //第一个元素应该为number类型
+```
+
+​	元组定义几个类型的数据，再赋值时就只能包含几个元素，否则会有越界报错。但是可以通过push方法来添加元素，添加的元素必须是已定义的类型。例：
+
+```typescript
+let tuple : [number, string] = [45, 'afd', 54] // 错误用例-越界错误
+
+let tuple1: [number, string] = [45, 'adf']
+tuple1.push(54) // 正确用例-添加元素
+
+tuple1.push(true) // 错误用例-添加的元素不属于已定义的类型
+```
+
+
+
+## 2.8 对象类型 —— 函数（Function）
 
 * **函数类型定义**
 
@@ -289,6 +316,10 @@ function sum(x: number, y: number) : number {
 let sum: (x: number, y: number) => number;
 sum = function(x: number, y: number) : number {
     return x + y;
+}
+// 也可以用函数表达式写法
+let add = (x: number, y: number): number => {
+    return x + y
 }
 /*
 等价于
@@ -333,7 +364,8 @@ function buildName2(firstName: string = 'Luo', lastName: string) : string {
 	return firstName + ' ' + lastName;
 }
 
-buildName2(undefined, 'hhh');
+// 使用 undefined 来明确使用默认值
+buildName2(undefined, 'hhh'); // luo hhh
 ```
 
 ​	
@@ -375,7 +407,120 @@ function reverse(x: number | string): number | string | void {
 
 
 
-## 2.8 类型断言（Type Assertion）
+## 2.9 对象类型——接口（interface）
+
+​	`interface(接口)` 类型可用于对对象进行描述。其特点有：
+
+* 定义接口的名称一般首字母大写；
+
+* 定义接口实体对象时，该对象的属性必须和接口定义完全一致；
+
+* 同样具有可选和只读（readonly）两种属性；
+
+  如果一个对象上有多个不确定的属性，但又需要用到接口时，可以在接口中设置自定义属性（PS：自定义属性类型限制其他属性类型）。例：
+
+```typescript
+interface Person {
+    readonly id: number,
+    age?: number,
+    [propName: string]: any // 或设置为 number | string
+}
+
+const jack: Person = {
+    id: 45,
+    name: 'jack',
+    sex: '女'
+}
+
+```
+
+
+
+## 2.10 对象类型——类（class）
+
+​		可通过修饰符来增强类使用 —— `public`、`protected` 、`private` 、`static`，也可以通过 extends 和 super 关键字来进行类继承和 类属性继承。
+
+	### 1. 继承
+
+​	通过 `extends ` 关键字对class类实现继承。子类可继承父类的属性、方法和构造器，从而进行使用。
+
+```typescript
+class Person {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+}
+class Student extends Person {}
+
+const s1 = new Student('lin')
+s1.name // 'lin'
+```
+
+
+
+​	但是当子类中存在自己的属性时，需要重写构造器来继承父类的属性。继承父类的属性可通过 `super` 关键字来进行继承并传递参数。
+
+```typescript
+class Person {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+}
+class Student extends Person {
+    score: number
+
+    constructor(name: string, score: number) {
+        // 必须先继承父类属性
+        super(name)
+        this.score = score
+    }
+}
+
+const s1 = new Student('lin', 95)
+s1.name // 'lin'
+s1.score // 95
+```
+
+
+
+### 2. private 修饰词
+
+​	`private` 修饰词可用于类属性和方法，从而使得被修饰的属性和方法只能在该类中进行访问。因此不能被通过类的实现对象和子类进行访问。
+
+```typescript
+class Person {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+}
+
+
+class Student extends Person {
+
+    // 私密属性，只有自己能访问
+    private score: number
+
+    constructor(name: string, score: number) {
+        super(name)
+        this.score = score
+    }
+}
+const s1 = new Student('lin', 95)
+s1.score // 报错，私密属性不能直接访问
+```
+
+
+
+### 3. protected 修饰符
+
+
+
+
+
+## 3.1 类型断言（Type Assertion）
 
 ### 1. 介绍	
 
@@ -556,7 +701,13 @@ let jerry: cat = animal as Cat;
 
 
 
-## 2.9 声明文件
+# 3.2 高级类型
+
+
+
+
+
+## 3.2 声明文件
 
 ​	在引用第三方库时，我们需要引用它的声明文件，才能够进行使用。
 
