@@ -1,37 +1,75 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Webpack5学习</title>
-</head>
-<body>
-    <h1>处理CSS资源</h1>
-    <div class="box">
-        webpack只能处理js资源
-        处理其他资源需要安装对应的loader
-    </div>
+    <!-- 引入vue3 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.33/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>处理CSS资源</h1>
+      <form class="form" ref="formRef" action="#" onsubmit="return false;">
+        <!-- 文本输入框 -->
+        <div class="form-item">
+          <label for="name">用户名:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            :value="formInline.user"
+          />
+        </div>
+        <div class="form-item">
+          <label for="password">密码:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            :value="formInline.password"
+          />
+        </div>
+        <div class="form-item">
+          <label>性别:</label>
+          <input type="radio" id="male" name="gender" value="male" checked />
+          <label for="male">男</label>
+          <input type="radio" id="female" name="gender" value="female" />
+          <label for="female">女</label>
+        </div>
+        <div class="form-item">
+          <input type="checkbox" id="subscribe" name="subscribe" checked />
+          <label for="subscribe">订阅推送信息</label>
+        </div>
+        <div class="form-item">
+          <div class="img-style">
+            <div class="sass" name="img">使用webpack处理sass样式资源</div>
+          </div>
+        </div>
+        <div class="form-item">
+          <label for="country">国家:</label>
+          <select id="country" name="country">
+            <option value="cn">CN</option>
+            <option value="usa">USA</option>
+            <option value="uk">UK</option>
+          </select>
+        </div>
+        <div class="form-item">
+          <button @click="onSubmit">提交</button>
+          {{message}}
+        </div>
+      </form>
 
-    <div class="less">
-        <p>
-            使用webpack处理less样式资源
-        </p>
-    </div>
-
-    <div class="scss">
-        使用webpack处理scss样式资源
-    </div>
-    <div class="sass">
-        使用webpack处理sass样式资源
-    </div>
-
-    <div>
+      <div>
         <i class="iconfont icon-jieruguanli"></i>
         <i class="iconfont icon-shouye"></i>
         <i class="iconfont icon-fanhui"></i>
+      </div>
     </div>
 
     <!-- <script src="../dist/static/js/main.js"></script> -->
-</body>
+  </body>
 </html>

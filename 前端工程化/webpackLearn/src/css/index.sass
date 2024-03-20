@@ -4,3 +4,22 @@
   background-image: url("../image/证件照.png")
   background-size: cover
   color: white
+  margin: auto
+
+.form
+  margin: 20px
+  width: 100%
+  border-radius: 5px
+  border: 2px solid black
+  padding: 20px 30px
+  .form-item
+    margin: 0 10px
+    .img-style
+      text-align: center
+    &:first-child
+      margin-bottom: 20px
+    + .form-item
+      margin: 0 10px
+      padding: 20px 0
+      border-top: 1px solid grey
+
