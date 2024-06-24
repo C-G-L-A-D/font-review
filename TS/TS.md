@@ -31,13 +31,19 @@ tsc xxx.ts
 
 ## 1.5 编译并运行 TypeScript
 
-​	由于每次编写完 ts 文件都需要像将其编译为 js 文件后才能运行，比较麻烦。所以可以安装 `ts-node` 插件，帮助我们编译运行 ts 文件一步到位。
+​	由于每次编写完 ts 文件都需要像将其编译为 js 文件后才能运行，比较麻烦。所以可以通过安装插件，只需要执行一条命令就能执行编译和运行 ts 文件：
 
-​	安装 `ts-node`：`npm install -g ts-node`
+1.  `ts-node` 插件：
 
-​	编译并运行ts文件：`ts-node xxx.ts`
+​					安装：`npm install -g ts-node`
 
+​					编译并运行 ts 文件：`ts-node xxx.ts`
 
+2. ` esno ` 插件：
+
+   ​	安装： `npm install -g esno`
+
+   ​	编译并运行 ts 文件： ` esno xxx.ts ` 
 
 ## 1.6 tsconfig.json
 
@@ -130,7 +136,9 @@ function error(message: string): never {
 
 
 
-## 2.2 任意值类型（Any Type）
+## 2.2 任意值类型（Any Type、Unknown Type）
+
+### 1. Any Type
 
 ​	任意值的数据类型是 `any` ，意思是 `any` 类型的变量可以是任意类型的数据，但不同的是， `any` 类型的变量在赋值的过程中可以更改其数据类型，并且可以访问该变量的任何属性和调用该变量的任何方法。
 
@@ -150,6 +158,44 @@ console.log(myAge.say()) // 运行报错，编译不报错。
 let word // 编译会报错
 word = '你好！';
 // 等价于 let word : any = '你好！';
+```
+
+
+
+### 2. Unknown Type
+
+​	` unknown ` 类型与 ` any ` 类型含义相似，表示类型不确定，任意类型的值都能分配给 ` unknown ` 类型。
+
+​	但是与 ` any ` 类型不同的是， ` unknown ` 类型的变量不能直接使用，从而避免了像 ` any ` 类型一样污染其他变量的问题。即不能将 ` unknown ` 类型赋值给其他变量、也不能访问 ` unknown ` 类型的属性和不能调用 ` unknown ` 类型的方法等
+
+```ts
+let data: unknown = 'hello'
+
+/** 任何类型的值都能分配给 unknown 类型 **/
+data = {
+  name: 'Mike',
+  age: 30,
+  isMarried: true,
+  hobbies: ['coding', 'reading', 'gaming']
+}
+
+/** unknown 类型的变量不能直接使用 **/
+
+// 1. unknown 类型的变量不能赋值给别的类型（除 unknown 类型 和 any 类型外）
+// const name: string = data // 报错
+
+const anyone: any = data
+const what: unknown = data
+
+// 2. unknown 类型的变量不能访问其属性
+// console.log(data.name) // 报错
+
+// 3. unknown 类型的变量不能调用其方法
+data = () => {
+  console.log('调用 unknown 类型变量的方法')
+}
+// data() // 报错
+
 ```
 
 
@@ -199,7 +245,7 @@ function getString(something: string | number) : string {
 
 
 
-## 2.5 对象类型 —— 接口（interface）
+## 2.5 接口（interface）
 
 ​	接口可以对对象描述进行限定。通过 `interface` 关键字定义接口对象。默认情况下，继承的对象只能够拥有接口定义指定属性，不能多，也不能少。但是可以定义可选属性、任意属性和只读属性。可选属性允许定义继承该接口的对象时是否为该属性赋值。任意属性允许对象新增指定类型的属性，但同时限制了对象中其他属性的数据类型只能是任意属性数据类型的子集。只读属性需要在接口定义属性前加上 `readonly` 关键字表示只读。只读属性只能在首次定义对象时为属性赋值，之后就只能读取。
 
@@ -229,7 +275,7 @@ console.log(tom.height) // 180
 
 
 
-## 2.6 对象类型 —— 数组（Array）
+## 2.6 数组（Array）
 
 ​	TypeScript 定义数组也可以指定数组的类型，数组中存在其他类型的数据会报错。同时在调用数组的一些方法时，传入的参数也会根据数组类型进行限定。例如：
 
@@ -268,7 +314,7 @@ interface IArguments {
 
 
 
-## 2.7 对象类型 —— 元组类型（Tuple）
+## 2.7 元组类型（Tuple）
 
 ​	元组类型允许一个**已知元素数量和类型**的数组，各元素的类型不必相同。例：
 
@@ -295,7 +341,124 @@ tuple1.push(true) // 错误用例-添加的元素不属于已定义的类型
 
 
 
-## 2.8 对象类型 —— 函数（Function）
+## 2.8 枚举（Enum）
+
+​	` Enum ` 类型允许定义一组命名的常量，用于提高代码的可读性和可维护性。因此 ` Enum ` 类型成员的命名意义大于它们的值。
+
+​	**通用结构和相关注意事项：**
+
+1. ` Enum ` 类型的成员无需赋值，系统会自动从零开始逐一递增，按照枚举成员定义顺序依次进行赋值；
+2. 可以手动给 ` Enum ` 类型成员进行手动赋值；
+3. ` Enum ` 类型成员值是数值型，那么该成员可以赋值给 number 类型或 ` Enum ` 类型的变量；
+4. ` Enum ` 类型成员值可以赋值给  ` Enum ` 类型或该成员值类型的变量；
+5. 访问 ` Enum ` 类型成员值，可以像访问对象属性一样，使用 ` 枚举变量名.成员名 ` 或 ` 枚举变量名[成员名] ` ;
+6. ` Enum ` 类型成员值不能是 ` bigInt ` 类型；
+7.  ` Enum ` 类型变量编译后，转换为对象类型变量。
+
+```ts
+enum Colors {
+  GREEN, // 1. 默认值为 0
+  RED, // 默认值为 1
+  BLUE, // 默认值为 2
+  YELLOW, // 默认值为 3
+  // ...成员 默认值为 index
+  ORANGE = 'orange', // 2. 手动赋值
+  PURPLE = 'purple',
+  GRAY = '#e3e3e3',
+  // WHITE = 7n // 6. 报错，不能是 bigInt 类型
+}
+
+/**
+ * 7. 编译过后，枚举类型转换为 js 对象
+ * let Colors = {
+ *  Red: 0,
+ *  Green: 1,
+ *  Blue: 2
+ * }
+ */
+
+// 3. 接收值可以是 Colors 类型（更推荐），也可以是 number 类型
+const color1: Colors = Colors.GREEN
+const color2: number = Colors.RED
+
+// Colors.YELLOW = 'yellow' // 4. 报错
+
+const color3 = Colors['BLUE'] // 5. 也可以使用该用法来获取枚举类型成员值
+
+```
+
+​	除此之外，还有一些注意事项:
+
+1. 如果上一个成员手动赋值了，且不是数值类型，则下一个成员只能手动赋值，否则编译报错。如果上一个成员是数值型，则下一个成员是否手动赋值都无所谓，系统会取上一个成员值 + 1 作为下一个成员的默认值。
+
+```ts
+enum PHONE {
+  HUAWEI = 'android',
+  XIAOMI = 'android',
+  SAMSUNG = 'android',
+  IPHONE = 'ios',
+  // HONOR, 报错，上一个成员手动赋值了，但是不是数值类型，则后续的成员必须手动赋值
+  VIVO = 9.2,
+  OPPO // 10.2 , 上一个成员是数值型，则后续的成员无需赋值也可以。
+}
+
+console.log(PHONE.OPPO) // 10.2
+```
+
+2. 在全局下或同一命名空间下声明多个同名枚举变量，则会进行合并。但是需要注意的是，枚举成员不能包含重复的成员，否则会报错；除此之外，枚举结构中也可以包含没有初始化的成员。但是如果前面同名的枚举结构中已经包含了未初始化的成员，那么后面同名的枚举结构中就都必须初始化成员值。
+
+```ts
+enum Language {
+  Chinese = 'zh'
+}
+
+enum Language {
+  Italian,
+  Spanish, // 可以不初始化值，上一个 Language 没有未初始化的成员
+  French = 'fr'
+}
+
+enum Language {
+  English = 'en'
+  // Russian 报错，如果前面同名的枚举结构中已经包含了未初始化的成员，那么后面同名的枚举结构中就都必须初始化成员值
+}
+
+enum Language {
+  // French = 'fr', // 报错，不能包含同名成员
+  German = 'de'
+}
+
+console.log(Language.Chinese) // zh
+console.log(Language.English) // en
+```
+
+3. 将枚举类型成员值赋值给变量时，如果该成员值是 string 型，则该变量不能再次赋值 string 类型
+
+```ts
+enum SUBJECTS {
+  MATH = '数学',
+  CHINESE = '语文',
+  ENGLISH = '英语',
+  PHYSICS = '物理',
+  CHEMISTRY = '化学'
+}
+
+let subject = SUBJECTS.MATH
+console.log(subject)
+
+// subject = '语文'  // 报错，此时 subject 为 SUBJECTS 类型，不能再赋值其他类型的值，包括 string 类型
+subject = SUBJECTS.ENGLISH
+
+function getSubject(subject: SUBJECTS) {
+  return subject
+}
+
+// getSubject('数学') // 报错
+```
+
+
+
+## 2.8 函数（Function）
 
 * **函数类型定义**
 
@@ -407,7 +570,7 @@ function reverse(x: number | string): number | string | void {
 
 
 
-## 2.9 对象类型——接口（interface）
+## 2.9 接口（interface）
 
 ​	`interface(接口)` 类型可用于对对象进行描述。其特点有：
 
@@ -436,11 +599,11 @@ const jack: Person = {
 
 
 
-## 2.10 对象类型——类（class）
+## 2.10 类（class）
 
 ​		可通过修饰符来增强类使用 —— `public`、`protected` 、`private` 、`static`，也可以通过 extends 和 super 关键字来进行类继承和 类属性继承。
 
-	### 1. 继承
+### 1. 继承
 
 ​	通过 `extends ` 关键字对class类实现继承。子类可继承父类的属性、方法和构造器，从而进行使用。
 
@@ -709,7 +872,9 @@ let jerry: cat = animal as Cat;
 
 ## 3.2 声明文件
 
-​	在引用第三方库时，我们需要引用它的声明文件，才能够进行使用。
+​	在引用第三方库时，我们需要引用它的声明文件，才能够进行使用；否则就需要手动为第三方库的变量、方法等进行声明。
+
+​	这是因为 ` typescript ` 把不同文件默认都处于同一全局下，因此命名不能冲突。要想解决这个问题，就可以使用模块文件，在各自的模块文件中进行声明定义。
 
 
 
