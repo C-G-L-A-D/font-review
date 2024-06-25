@@ -405,7 +405,7 @@ enum PHONE {
 console.log(PHONE.OPPO) // 10.2
 ```
 
-2. 在全局下或同一命名空间下声明多个同名枚举变量，则会进行合并。但是需要注意的是，枚举成员不能包含重复的成员，否则会报错；除此之外，枚举结构中也可以包含没有初始化的成员。但是如果前面同名的枚举结构中已经包含了未初始化的成员，那么后面同名的枚举结构中就都必须初始化成员值。
+2. 在全局下或同一命名空间下声明多个同名枚举变量，则会进行==**合并**==。但是需要注意的是，枚举成员不能包含重复的成员，否则会报错；除此之外，枚举结构中也可以包含没有初始化的成员。但是如果前面同名的枚举结构中已经包含了未初始化的成员，那么后面同名的枚举结构中就都必须初始化成员值。
 
 ```ts
 enum Language {
@@ -456,9 +456,75 @@ function getSubject(subject: SUBJECTS) {
 // getSubject('数学') // 报错
 ```
 
+4. 枚举类型前也可以加上 ` const ` 修饰词，表示不能被重新赋值。加与不加的区别在于，编译为 js 文件后，加上 ` const ` 修饰词的枚举结构不会转换为对象类型，且枚举成员都会被替换为对应的值。 同时加上 ` const ` 枚举变量只能与加上的 ` const ` 的同名枚举变量合并，同理，不加的也是。
+
+```ts
+const enum Nums {
+    First,
+    Second,
+    Third,
+    Fourth
+}
+
+/**
+ * 报错，只能与相同结构的枚举合并
+ * enum Nums {
+ *  Fifth,
+ *  Sixth
+ * }
+ */
 
 
-## 2.8 函数（Function）
+/**
+ * 加上 const 关键字后，编译为js，不会生成对应的js对象，
+ * 同时访问枚举成员，会把枚举成员变量替换为枚举值
+ * 
+ * enum Nums {
+ *  First,
+ *  Second,
+ *  Third,
+ *  Fourth
+ * }
+ * 
+ * // 不加上 const 关键字的枚举变量编译为js文件后，还是 console.log(Nums.First)
+ * console.log(Nums.First)
+ * 
+ * // 加上 const 关键字的枚举变量编译为js文件后，转换为 console.log(0)
+ * console.log(Nums.First)
+ */
+```
+
+5. 可以通过 ` keyof typeof <枚举变量> ` 来获取枚举变量中所有成员的类型（通过联合类型返回）。
+
+![image-20240625101353387](https://gitee.com/roada/drawingBed/raw/main/blog/image-20240625101353387.png)
+
+6. 可以通过 ` type <类型名称> = { [key in <枚举变量>] :any} ` 获取所有枚举成员值的.
+
+![image-20240625103501892](https://gitee.com/roada/drawingBed/raw/main/blog/image-20240625103501892.png)
+
+
+
+7. 如果枚举成员值是数值型，则可以通过反向映射获取对应的枚举成员名称（使用值来获取成员名）。如果值，有重复的，则获取最后一个符合条件的枚举成员名称。
+
+```ts
+enum Days1 {
+    Thursday = 4,
+    Friday = 4,
+    Saturday = 6,
+    Sunday = 7,
+    Data = 'dfsf'
+}
+
+console.log(Days1[4]) // Friday
+
+console.log(Days1[8]) // undefined
+
+// console.log(Days1['dfsf']) // 报错，只有 number 型的值才能反向映射名称
+```
+
+
+
+## 2.9 函数（Function）
 
 * **函数类型定义**
 
@@ -570,7 +636,7 @@ function reverse(x: number | string): number | string | void {
 
 
 
-## 2.9 接口（interface）
+## 2.10 接口（interface）
 
 ​	`interface(接口)` 类型可用于对对象进行描述。其特点有：
 
@@ -599,7 +665,7 @@ const jack: Person = {
 
 
 
-## 2.10 类（class）
+## 2.11 类（class）
 
 ​		可通过修饰符来增强类使用 —— `public`、`protected` 、`private` 、`static`，也可以通过 extends 和 super 关键字来进行类继承和 类属性继承。
 
