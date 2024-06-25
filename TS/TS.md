@@ -747,6 +747,8 @@ s1.score // 报错，私密属性不能直接访问
 
 
 
+# 3. 进阶
+
 
 
 ## 3.1 类型断言（Type Assertion）
@@ -930,13 +932,13 @@ let jerry: cat = animal as Cat;
 
 
 
-# 3.2 高级类型
+## 3.2 高级类型
 
 
 
 
 
-## 3.2 声明文件
+## 3.3 声明文件
 
 ​	在引用第三方库时，我们需要引用它的声明文件，才能够进行使用；否则就需要手动为第三方库的变量、方法等进行声明。
 
@@ -1000,4 +1002,161 @@ npm install @types/jquery --save-dev
 * **直接扩展全局变量：** 通过 `<script>` 标签引入后，改变一个全局变量的构造；
 * **在 npm 包或 UMD 库中扩展全局变量：** 引用 npm 包或 UMD 库后，改变一个全局变量的结构。
 * **模块插件：** 通过`<script>` 标签或 `import` 导入后，改变另一个模块的结构。
+
+
+
+## 3.4 工具类
+
+### Partial（对象类型的所有属性可选）
+
+​	` Partial ` 可以将对象中的所有属性都标记为==可选==的。用法如下：
+
+```ts
+type User = {
+    name: string,
+    age: number,
+    email: string
+}
+// 正常对象类型，如果没有标记可选，则都是必选
+const John: User = {
+    name: 'John',
+    age: 30,
+    email: 'john@example.com'
+}
+
+// 使用 Partial 转换的对象类型，所有属性都可选
+type PartialUser = Partial<User>
+const partialUser : PartialUser = {
+    name: 'John',
+    age: 30
+}
+
+```
+
+​	手动实现：
+
+```ts
+type MyPartial<T> = {
+    // +? 代表该属性变成可选属性
+    [key in keyof T]+? : T[key]
+}
+```
+
+### Required（对象类型所有属性必选）
+
+​	` Required ` 可以将对象中所有属性都标记为==必选==。用法如下：
+
+```ts
+// 所有属性都可选
+type User1 = {
+    name?: string,
+    age?: number,
+    email?: string
+}
+
+const Mark: User1 = {
+    // User1 类型所有属性都可选
+}
+
+// 使用 Required 工具类转换 User1 类型后，新类型的所有属性都必选
+type RequiredUser1 = Required<User1>
+const requiredUser: RequiredUser1 = {
+    name: 'Mark',
+    age: 10,
+    email: 'mark@gmail.com'
+}
+
+```
+
+​	手动实现：
+
+```ts
+// 实现 Required 工具类
+type MyRequired<T> = {
+    // - ? 代表删除可选属性
+    [key in keyof T] - ?: T[key]
+}
+```
+
+### Readonly（对象类型所有属性都只读）
+
+​	` Readonly ` 可以将对象中的所有属性都标记为==只读==。用法如下：
+
+```ts
+type User2 = {
+    name: string,
+    age: number,
+    email: string
+}
+const Jack: User2 = {
+    name: 'Jack',
+    age: 30,
+    email: 'jack@example.com'
+}
+console.log(Jack.age)
+Jack.age = 18 // 正常的 User2 类型，可以修改属性
+console.log(Jack.age)
+
+
+// Readonly 将传入的 User2 类型的所有属性都转换为只读类型
+type ReadonlyUser = Readonly<User2>
+const readonlyUser: ReadonlyUser = {
+    name: 'Jack',
+    age: 30,
+    email: 'jack@example.com'
+}
+// readonlyUser.age = 20 // 报错， readonlyUser中的属性都是只读的
+
+```
+
+​	手动实现：
+
+```ts
+// 实现 Readonly，+readonly 可以简化为 readonly
+type MyReadonly1<T> = {
+    +readonly [P in keyof T]: T[P]
+  // 等同与 readonly [P in keyof T]: T[P]
+}
+```
+
+### Record（根据参数，自动生成对象类型）
+
+​	` Record ` 内置类可以接收两个参数，第一个用来定义键名（必须兼容 string | number | symbol）。第二个参数用作键值的类型，最后返回一个对象类型。具体用法如下：
+
+```ts
+// 用法：Record<Keys, Type> ，Keys 必须兼容 string | number | symbol
+
+type AAAA = Record<'a', string>
+const aaaa: AAAA = {
+    a: 'address'
+}
+
+// Keys 也可以是联合类型，会依次走展开为多个键
+type BB = 'bread' | 'butter'
+type BBBB = Record<BB, string>
+const bbbb: BBBB = {
+    bread: 'fasdf',
+    butter: 'dsfgggg'
+}
+
+// Type 也可以是联合类型，表示键值都是该联合类型的子集
+type CC = string | number
+type CCCC = Record<'a', CC>
+const cccc: CCCC = {
+    a: 'address'
+}
+const cc: CCCC = {
+    a: 10
+}
+
+```
+
+​	手动实现：
+
+```ts
+// 实现 Record
+type MyRecord<Keys extends string | number | symbol, Type> = {
+    [Key in Keys]: Type
+}
+```
 
