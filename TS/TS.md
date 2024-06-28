@@ -1054,6 +1054,105 @@ npm install @types/jquery --save-dev
 
 ## 3.4 工具类
 
+
+
+### Exclude（两个类型取差集）
+
+​	` Exclude ` 能够从一个==联合类型==中移除另一个类型中也存在的部分。
+
+```ts
+type UserProps = 'name' | 'age' | 'email' | 'phone' | 'address'
+type RequiredUserProps = 'name' | 'phone'
+
+type OptionalUserProps = Exclude<UserProps, RequiredUserProps>
+
+let optionalUserProps: OptionalUserProps = 'age'
+optionalUserProps = 'address'
+optionalUserProps = 'email'
+```
+
+![image-20240628153954171](https://gitee.com/roada/drawingBed/raw/main/blog/image-20240628153954171.png)
+
+​	手动实现：
+
+```ts
+/**
+ * 如果 T 兼容 U，就返回 never 类型， never 类型在联合类型中会被消除掉，因此相当于剔除了交集；
+ * 反之表示不存在交集，可直接返回 T 作为两个类型的差集
+ * 
+ * @param T - 要进行排除操作的联合类型
+ * @param U - 用于比较和排除的类型
+ * @returns 返回 T 与 U 的差集
+ */
+type MyExclude<T, U> = T extends U ? never : T
+```
+
+### Extract（两个类型取交集）
+
+​		` Extract ` 能从一个联合类型中，提取与另一个指定类型相同的部分，然后组成一个新类型返回。==与 ` Exclude ` 相反==。
+
+```ts
+type AnimalProps = 'name' | 'age' | 'kind' | 'color' | 'food'
+
+type CatProps = 'name' | 'kind' | 'color'
+
+type ExtractProps = Extract<AnimalProps, CatProps>
+
+let props: ExtractProps = 'name'
+props = 'color'
+props = 'kind'
+```
+
+![image-20240628160118488](https://gitee.com/roada/drawingBed/raw/main/blog/image-20240628160118488.png)
+
+​	手动实现：
+
+```ts
+/**
+ * 如果 T 兼容 U，直接返回 T 兼容的类型；
+ * 反之，就返回 never 类型， never 类型在联合类型中会被消除掉，因此相当于剔除了差集；
+ * 
+ * @param T - 原始联合类型
+ * @param U - 用于比较和保留的类型
+ * @returns 返回 T 与 U 的交集
+ */
+type MyExtract<T, U> = T extends U ? T : never
+```
+
+### Parameters（提取函数的参数类型）
+
+​	` Parameters ` 内置类可以获取==指定函数类型==的所有==参数类型==。
+
+```ts
+type AddType = (x: number, y: number) => number
+
+type AddProps = Parameters<AddType>
+const addParams: AddProps = [1, 2]
+```
+
+如果只有函数，并且也没有定义函数类型，此时 如何获取该函数的参数类型呢？
+
+此时可以通过类型查询操作符 ` typeof ` （在 ts 和 js 中两者用法不同）来获取函数的结构化类型：
+
+```ts
+const Sub = (x: number, y: number) => x - y
+type  SubProps = Parameters<typeof Sub>
+const subParams: SubProps = [2, 1]
+```
+
+
+
+### ReturnType（提取函数的返回类型）
+
+​	` ReturnType ` 内置类可以获取==指定函数类型==的==返回值类型==。
+
+```ts
+```
+
+
+
+
+
 ### Partial（对象类型的所有属性可选）
 
 ​	` Partial ` 可以将对象中的所有属性都标记为==可选==的。用法如下：
@@ -1077,7 +1176,6 @@ const partialUser : PartialUser = {
     name: 'John',
     age: 30
 }
-
 ```
 
 ​	手动实现：
@@ -1204,6 +1302,98 @@ const cc: CCCC = {
 // 实现 Record
 type MyRecord<Keys extends string | number | symbol, Type> = {
     [Key in Keys]: Type
+}
+```
+
+
+
+### Pick（根据参数，裁剪指定对象类型）
+
+​	` Pick ` 可以裁剪对象类型，只保留你传入的属性名组成部分。因此 ` Pick ` 工具类接收两个参数，第一个是指定的对象类型，第二个则是由你想保留的字面量组成的联合类型。因此限制了第二个参数的联合类型必须是第一个参数的属性名。
+
+```ts
+type Teacher = {
+    name: string,
+    age: number,
+    subject: string,
+    phone: string,
+    email: string
+}
+
+const Park: Teacher = {
+    name: 'Park',
+    age: 30,
+    subject: 'Math',
+    phone: '010-1234-5678',
+    email: 'park@gmail.com'
+}
+
+type PickTeacher = Pick<Teacher, 'name' | 'subject' | 'phone'>;
+
+const Kim: PickTeacher = {
+    name: 'Kim',
+    subject: 'chinese',
+    phone: '010-1234-5678'
+}
+```
+
+​	手动实现：
+
+```ts
+/**
+ * 选择一个类型中的部分属性。
+ * 
+ * 使用泛型和索引签名来从一个给定的类型T中选择指定的属性，创建一个新的类型。
+ * 这种类型操作符允许开发者从复杂的类型中提取所需的子集，这对于创建更通用的组件或函数非常有用。
+ * 
+ * @param T - 原始类型，从中选择属性。
+ * @param K - 原始类型T中要选择的属性的键的类型，这些键必须是T的已知属性键。
+ * @returns 返回一个新的类型，该类型包含从T中选择的属性。
+ */
+type MyPick<T, K extends keyof T> = {
+    [key in K]: T[key]
+}
+```
+
+### Omit（根据参数，剔除指定对象类型的属性）
+
+​	` Omit ` 类可以根据指定参数，将指定对象类型的指定属性移出 —— ` Omit<指定对象类型， 待移除属性名> ` 。==作用正好与 ` Pick ` 相反==。
+
+``` ts
+type Student = {
+    name: string,
+    age: number,
+    score: number,
+    class: string,
+    grade: string
+}
+
+const Pom: Student = {
+    name: 'Pom',
+    age: 20,
+    score: 100,
+    class: '一班',
+    grade: '一年级'
+}
+
+type OmitStudent = Omit<Student, 'age' | 'score'>
+const omitStudent: OmitStudent = {
+    name: 'Pom',
+    class: '一班',
+    grade: '一年级'
+}
+```
+
+​	手动实现：
+
+```ts
+/**
+ * @param T - 原始对象的类型
+ * @param K - 需要排除的属性键的类型集合，这些键属于 T
+ * @returns 返回一个新对象类型，该类型包含 T 中所有不包含在 K 中的属性键及其对应值
+ */
+type MyOmit<T, K extends keyof T> = {
+    [P in Exclude<keyof T, K>]: T[P]
 }
 ```
 
