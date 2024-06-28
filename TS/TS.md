@@ -1052,7 +1052,239 @@ npm install @types/jquery --save-dev
 
 
 
-## 3.4 工具类
+## 3.4 类型运算符
+
+### 1. keyof
+
+` keyof ` 用于返回该对象所有键名组成的联合类型。所以 ` keyof ` 只接受一个对象类型作为参数。用法：
+
+```ts
+type MyObjType = {
+    name: string,
+    age: number,
+    address: string
+}
+
+
+type MyObjKeysType = keyof MyObjType; // "name" | "age" | "address"
+
+let myObjKeys: MyObjKeysType = "name";
+myObjKeys = "address"
+myObjKeys = "age"
+```
+
+![image-20240629005955935](https://gitee.com/roada/drawingBed/raw/main/blog/202406290059402.png)
+
+> 因为对象的键名只有 ` string | number | symbol ` 三种类型，因此使用 ` keyof ` 获取任意对象的键名的联合类型只会是  ` string | number | symbol ` 。
+>
+> ![image-20240629010311161](https://gitee.com/roada/drawingBed/raw/main/blog/202406290103052.png)
+>
+> 但是如果对象中没有属性，不存在键名，此时使用 ` keyof ` 获取空对象的键名类型得到的是 ` never ` ，表示不可能存在这样类型的键名。
+>
+> ![image-20240629010546770](https://gitee.com/roada/drawingBed/raw/main/blog/202406290105026.png)
+
+
+
+但是在面对不同的对象类型时，使用 ` keyof ` 获取的返回类型也不同。
+
+* 假设对象属性名采用了索引形式，那么 ` keyof ` 会返回属性名的索引类型；
+
+  ```ts
+  interface MyInterface {
+      [prop: number]: number
+  }
+  
+  // number
+  type MyInterfaceKeysType = keyof MyInterface
+  
+  interface MyInterface2 {
+      [prop: string]: number
+  }
+  
+  // string | number
+  type MyInterface2KeysType = keyof MyInterface2
+  ```
+
+![image-20240629012813183](https://gitee.com/roada/drawingBed/raw/main/blog/202406290128051.png)
+
+* 假设 ` keyof ` 用于获取数组或元组类型，那么得到的联合类型不仅包括元素的索引，还包括数组本身属性键名的类型;
+
+  ```ts
+  type arrKeys = keyof [323, 'dff']
+  // "0" | "1" 数组元素索引及 length 、push 、pop、filter、forEach等Array自身包含的属性、方法名
+  const len: arrKeys = "map"
+  ```
+
+  ![image-20240629013441011](https://gitee.com/roada/drawingBed/raw/main/blog/202406290134116.png)
+
+* 假设 ` keyof ` 用于获取多个对象并集的联合类型，那将会得到多个对象中共有的键名；
+
+  ```ts
+  type A = { x: number, y: string, z: boolean }
+  type B = { x: number, a: string, b: string }
+  
+  // C 等价于 "x"
+  type C = keyof (A | B)
+  ```
+
+  ![image-20240629013817744](https://gitee.com/roada/drawingBed/raw/main/blog/202406290138022.png)
+
+* 假设 ` keyof ` 用于获取多个对象交集的交叉类型，那将会返回所有的键名。
+
+  ```ts
+  type A = { x: number, y: string, z: boolean }
+  type B = { x: number, a: string, b: string }
+  
+  // D 等价于 "x" | "y" | "z" | "a" | "b" 
+  type D = keyof(A & B)
+  ```
+
+  ![image-20240629013918065](https://gitee.com/roada/drawingBed/raw/main/blog/202406290139186.png)
+
+
+
+那如果是获取对象键值的类型，又该如何呢？
+
+```ts
+type MyObjType = {
+    name: string,
+    age: number,
+    address: string
+}
+
+// 用于获取对象类型中键值的类型
+// MyObjValuesType 等价于 "string" | "number"
+type MyObjValuesType = MyObjType[keyof MyObjType]
+```
+
+![image-20240629014007577](https://gitee.com/roada/drawingBed/raw/main/blog/202406290140842.png)
+
+
+
+### 2. in
+
+` in ` 在 ` TypeScript ` 中用于取出（遍历）联合类型的每一个成员类型【但在 ` JavaScript ` 中用于确定对象中是否包含某个属性名】。
+
+```ts
+type U = 'a' | 'b' | 'c' | 'age'
+
+/**
+ * 等价于
+ * type Foo = {
+ *     a: number,
+ *     b: number,
+ *     c: number,
+ *     age: number
+ * }
+ */
+type Foo = {
+    [Prop in U]: number
+}
+
+const myFoo: Foo = {
+    a: 1,
+    b: 2,
+    c: 3,
+    age: 20
+}
+```
+
+
+
+### 3. 方括号 ` [] `
+
+` [] ` 用于去除对象类型中的键值类型。
+
+```ts
+type Dog = {
+    color: string,
+    breed: string,
+    age: number,
+    name: string
+};
+
+// Dog['name'] 等价于 string
+const dogName: Dog['name'] = "Fido";
+// Dog['age'] 等价于 number
+const dogAge: Dog['age'] = 3;
+// Dog['color'] 等价于 string
+const dogColor: Dog['color'] = "brown";
+// Dog['breed'] 等价于 string
+const dogBreed: Dog['breed'] = "Labrador";
+```
+
+
+
+### 4. 条件运算符（` extends ... ？... : ... `）
+
+` extends ... ？... : ... ` 可以根据当前类型是否符合某种条件，返回不同的类型，类似 ` JavaScript ` 的三元运算符，但是多了 ` extends ` 关键字。
+
+用法：` T extends U ? X : Y `
+
+作用：` extends ` 用于判断，类型 T 是否可以赋值给类型 U ，即类型 T 是否为类型 U 的子类型。如果可以，则返回结果为 `X` ，反之，返回 ` Y ` 。 
+
+```ts
+type isNum = 1 extends number ? true : false
+
+interface Animal {
+    live(): void;
+}
+interface Fish extends Animal {
+    swim(): void;
+}
+
+// number
+type T1 = Fish extends Animal ? number : string;
+
+// string
+type T2 = RegExp extends Animal ? number : string;
+```
+
+
+
+### 5. infer
+
+` infer ` 用于定义泛型里推断出来的类型参数，而不是外部传入的类型参数。通常于条件运算符一起使用，用在 ` extends ` 关键字后面的父类型之中。
+
+```ts
+/**
+ * 如果参数 T 是一个数组，那么就将该数组的成员类型推断为 U，即 U 是从T 推断出来的。
+ * 如果 T 不是一个数组，那么就返回 T 自身。
+ * 反之，如果 T 是一个数组，则返回数组元素的联合类型
+ */
+type Flatten<T> = T extends Array<infer U> ? U : T;
+
+// Item 等价为 "sdf" | false | number
+type Item = Flatten<['sdf', false, number]>
+
+// Str 等价于 string 
+type Str = Flatten<string[]>;
+
+// Str 等价于 {a: number;} 
+type Obj = Flatten<{ a: number }>;
+```
+
+![image-20240629022053740](https://gitee.com/roada/drawingBed/raw/main/blog/202406290220966.png)
+
+为什么要使用 ` infer ` 关键字呢？
+
+当不知道变量类型时，如果想要使用该类型，就可以使用 ` infer ` 关键字。或当外部需要获取内部类型时，可以只传入一个已知类型，就能根据条件判断获取另一类型。  
+
+### 6. is
+
+
+
+### 7. 模板字符串
+
+
+
+### 8. satisfies
+
+
+
+
+
+## 3.5 工具类
 
 
 
@@ -1140,13 +1372,51 @@ type  SubProps = Parameters<typeof Sub>
 const subParams: SubProps = [2, 1]
 ```
 
+手动实现：
+
+```ts
+/**
+ * (...args: any) => any 表示函数类型
+ * T 是 函数类型
+ * infer 用于隐式类型推断， infer Args 表示获取 Args 的类型，这里的 Args 就是函数的所有参数类型
+ */
+type MyParameters<T extends (...args: any) => any> =
+    T extends (...args: infer Args) => any ? Args : any
+```
+
 
 
 ### ReturnType（提取函数的返回类型）
 
-​	` ReturnType ` 内置类可以获取==指定函数类型==的==返回值类型==。
+​	` ReturnType ` 内置类可以获取==指定函数类型==的==返回值类型==。如果函数没有明确指定函数类型，还可以通过 ` typeof ` 获取函数类型。
 
 ```ts
+type multType = (x: number, y: number) => number;
+
+type multReturn = ReturnType<multType>
+
+
+const Multiplication = (x: number, y: number) => x * y;
+
+// 根据指定的函数类型获取函数返回值
+const result1: multReturn = Multiplication(2, 5)
+
+// 根据函数获取函数返回值
+const result2: ReturnType<typeof Multiplication> = Multiplication(3, 5)
+
+console.log(result1, result2)
+```
+
+手动实现：
+
+```ts
+/**
+ * (...args: any) => any 表示函数类型
+ * T 是 函数类型
+ * infer 用于隐式类型推断， infer R 表示获取 R 的类型，这里的 R 就是函数的返回值类型
+ */
+type myReturnType<T extends (...args: any) => any> =
+    T extends (...args: any) => infer R ? R : any 
 ```
 
 
