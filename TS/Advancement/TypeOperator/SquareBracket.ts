@@ -13,3 +13,4 @@ const dogAge: Dog['age'] = 3;
 const dogColor: Dog['color'] = "brown";
 // Dog['breed'] 等价于 string
 const dogBreed: Dog['breed'] = "Labrador";
+
