@@ -1276,7 +1276,40 @@ type Obj = Flatten<{ a: number }>;
 
 ### 7. 模板字符串
 
+​	在 ` JavaScript ` 中模板字符串可以用来拼接变量和字符串，从而返回一个新的字符串。而在 ` TypeScript ` 中，模板字符串的也具备同样的作用，同时也能够实现类型的拼接。
 
+```ts
+const isAM = new Date().getHours() < 12;
+const getAMPM = () => isAM ? '上午' : '下午';
+
+const hello_name = '张三';
+
+// 定义字面量
+const str1 = `Hi, ${hello_name}. ${getAMPM()}好`;
+console.log(str1) // Hi, 张三. 下午好
+
+// 使用泛型决定模版字符串类型
+type SayHello<T extends string | number> = `Hello ${T}`;
+type Greet1 = SayHello<"linbudu">; // "Hello linbudu"
+type Greet2 = SayHello<599>; // "Hello 599"
+```
+
+​	比较特殊的是，如果联合类型作为变量传入模板字符串变量中，那么最终类型结果也是联合类型。这是因为模板字符串会联合类型中的所有类型作为变量使用。
+
+```ts
+// 遍历联合类型作为变量使用
+type Brand = 'iphone' | 'xiaomi' | 'honor';
+type SKU1 = `${Brand}`; // "iphone" | "xiaomi" | "honor"
+
+type SKU2 = `${Brand}-latest`; // "iphone-latest" | "xiaomi-latest" | "honor-latest"
+
+
+type Memory = '16G' | '64G';
+type ItemType = 'official' | 'second-hand';
+type SKU3 = `${Brand}-${Memory}-${ItemType}`;
+```
+
+![image-20240702175815212](https://gitee.com/roada/drawingBed/raw/main/blog/image-20240702175815212.png)
 
 ### 8. satisfies
 
