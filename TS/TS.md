@@ -58,9 +58,17 @@ tsc xxx.ts
 * `include` ： 设置读取哪些可识别的文件，数组；
 * `outDir` ： 指定生成的文件存放目录；
 * `target` ： 设置 JavaScript 版本；
+* ` strict ` ：启用所有严格类型检查；
 * `noImplicitReturns` ：设置是否提示函数末尾需要返回值；
 * `noFallthroughCasesInSwitch` ：检查 `switch` 代码中两个 `case` 中是否添加了 `beark` 语句；
-* 
+* ` types ` ：指定要包含的类型包名称，而不需要在源文件中引用。不指定则默认加载所有类型包。例如：` "types": ["node"] ` 表示加载 ` @types/node ` 类型包；
+* ` declaration ` ：从项目中的 TS 和 JS 文件中生成 .d.ts 声明文件；
+* ` emitDeclarationOnly ` ：只输出 .d.ts 声明文件，不输出 JS 文件；
+* ` noEmit ` ：禁用从编译中输出 JS 文件和声明文件；
+* ` noImplicitAny ` ：为带有隐含 any 类型的表达式和声明启用错误报告，可用于检测类型标注是否遗漏；
+* ` noUnusedLocals ` ：有变量未使用时报错；
+* ` noUnusedParameters ` ：函数参数未使用时报错；
+* ` noImplicitReturns ` ：为函数中没有显示返回启用报错；
 
 
 
